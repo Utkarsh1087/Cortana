@@ -31,10 +31,20 @@ brain = get_llm_provider()
 memory = get_memory_manager("sqlite")
 tts = get_tts_engine("auto")
 
+main_loop: Optional[asyncio.AbstractEventLoop] = None
+
 # Proactive reminder alert callback
 def on_proactive_alert(msg: str):
-    asyncio.run(broadcast_state("speaking", msg))
-    tts.speak(msg)
+    global main_loop
+    try:
+        if main_loop and main_loop.is_running():
+            asyncio.run_coroutine_threadsafe(broadcast_state("speaking", msg), main_loop)
+    except Exception:
+        pass
+    try:
+        tts.speak(msg)
+    except Exception:
+        pass
 
 reminder_daemon.alert_callback = on_proactive_alert
 reminder_daemon.start()
@@ -181,6 +191,8 @@ async def bridge_sync_loop():
 
 @app.on_event("startup")
 async def on_startup():
+    global main_loop
+    main_loop = asyncio.get_running_loop()
     asyncio.create_task(bridge_sync_loop())
     autonomous_mind.tts_callback = speak_async
     autonomous_mind.start()
@@ -195,11 +207,15 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     connected_websockets.add(websocket)
     # Send initial idle state
-    await websocket.send_json({
-        "type": "state_change",
-        "state": "idle",
-        "text": "Hey there! I'm online and ready. How can I help you today?"
-    })
+    try:
+        await websocket.send_json({
+            "type": "state_change",
+            "state": "idle",
+            "text": "Hey there! I'm online and ready. How can I help you today?"
+        })
+    except Exception:
+        pass
+
     try:
         while True:
             data = await websocket.receive_text()
@@ -243,10 +259,14 @@ async def handle_chat(request: ChatRequest):
 
     # 3. Generate response via LLM + Tools
     loop = asyncio.get_running_loop()
-    raw_response_text = await loop.run_in_executor(
-        None, 
-        lambda: brain.generate_response(context_messages, tool_registry=registry)
-    )
+    try:
+        raw_response_text = await loop.run_in_executor(
+            None, 
+            lambda: brain.generate_response(context_messages, tool_registry=registry)
+        )
+    except Exception as e:
+        print(f"[Chat Generation Warning: {e}]")
+        raw_response_text = "I'm right here with you! There was a brief network hiccup, but I'm listening."
 
     # 4. Parse [EMOTION: ...] and [ANIMATION: ...] metadata
     clean_text, emotion, animation = parse_llm_response_tags(raw_response_text)
@@ -268,10 +288,17 @@ async def handle_chat(request: ChatRequest):
 
 async def speak_async(text: str, emotion: str = "affectionate"):
     """Play speech in background thread while avatar animates."""
-    loop = asyncio.get_running_loop()
-    await loop.run_in_executor(None, lambda: tts.speak(text))
-    # Return to idle after speech completes
-    await broadcast_state("idle", text, emotion=emotion)
+    try:
+        loop = asyncio.get_running_loop()
+        await loop.run_in_executor(None, lambda: tts.speak(text))
+    except Exception:
+        pass
+    finally:
+        # Return to idle after speech completes
+        try:
+            await broadcast_state("idle", text, emotion=emotion)
+        except Exception:
+            pass
 
 def start_avatar_server(port: int = 8000):
     print("=" * 65)
