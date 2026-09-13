@@ -244,13 +244,8 @@ If you find this project interesting or inspiring, please consider **leaving a s
 
 ---
 
-## 📜 License
-
-Distributed under the **MIT License**. See `LICENSE` for more information.
-
----
-
 <div align="center">
 Made with ❤️ for the future of Embodied Autonomous AI.
 </div>
+
 
