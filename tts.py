@@ -207,11 +207,14 @@ class EdgeTTS(BaseTTS):
 
 class ElevenLabsTTS(BaseTTS):
     """
-    ElevenLabs TTS engine implementation (swappable).
+    ElevenLabs High-Definition Neural TTS engine with automatic fallback.
+    Uses ultra-fast, low-credit eleven_flash_v2_5.
     """
-    def __init__(self, api_key: str = None, voice_id: str = "21m00Tcm4TlvDq8ikWAM"): # Rachel / Female
+    def __init__(self, api_key: str = None, voice_id: str = "21m00Tcm4TlvDq8ikWAM", model_id: str = "eleven_flash_v2_5"):
         self.api_key = api_key or os.getenv("ELEVENLABS_API_KEY")
-        self.voice_id = voice_id
+        self.voice_id = voice_id # Default Rachel / Natural Female
+        self.model_id = model_id # Flash v2.5 consumes 50% fewer credits with ultra-low latency
+        self._edge_fallback = EdgeTTS()
         try:
             if not pygame.mixer.get_init():
                 pygame.mixer.init()
@@ -231,28 +234,33 @@ class ElevenLabsTTS(BaseTTS):
         if not clean_text:
             return
 
-        if not self.api_key or self.api_key == "your_elevenlabs_api_key_here":
-            # Fallback to EdgeTTS
-            EdgeTTS().speak(clean_text, rate=rate, pitch=pitch)
+        if not self.api_key or self.api_key.startswith("your_"):
+            self._edge_fallback.speak(clean_text, rate=rate, pitch=pitch)
             return
 
-        from elevenlabs.client import ElevenLabs
-        import io
+        try:
+            from elevenlabs.client import ElevenLabs
+            import io
 
-        client = ElevenLabs(api_key=self.api_key)
-        audio = client.generate(
-            text=clean_text,
-            voice=self.voice_id,
-            model="eleven_monolingual_v1"
-        )
-        
-        audio_bytes = b"".join(audio)
-        audio_file = io.BytesIO(audio_bytes)
-        
-        pygame.mixer.music.load(audio_file)
-        pygame.mixer.music.play()
-        while pygame.mixer.music.get_busy():
-            pygame.time.Clock().tick(10)
+            client = ElevenLabs(api_key=self.api_key)
+            audio = client.generate(
+                text=clean_text,
+                voice=self.voice_id,
+                model=self.model_id
+            )
+            
+            audio_bytes = b"".join(audio)
+            audio_file = io.BytesIO(audio_bytes)
+            
+            with _speech_lock:
+                self.stop()
+                pygame.mixer.music.load(audio_file)
+                pygame.mixer.music.play()
+                while pygame.mixer.music.get_busy():
+                    pygame.time.Clock().tick(10)
+        except Exception as e:
+            # On any credit exhaustion or network error, fallback seamlessly to EdgeTTS
+            self._edge_fallback.speak(clean_text, rate=rate, pitch=pitch)
 
 
 def set_active_female_voice(preset_name: str) -> str:
@@ -269,11 +277,18 @@ def set_active_female_voice(preset_name: str) -> str:
     return ACTIVE_VOICE
 
 
-def get_tts_engine(engine_type: str = "edge") -> BaseTTS:
-    """Factory function to get configured TTS engine."""
-    if engine_type.lower() == "edge":
+def get_tts_engine(engine_type: str = "auto") -> BaseTTS:
+    """Factory function to get configured TTS engine (auto detects ElevenLabs key)."""
+    t = engine_type.lower().strip()
+    if t == "auto":
+        api_key = os.getenv("ELEVENLABS_API_KEY", "")
+        if api_key and not api_key.startswith("your_"):
+            return ElevenLabsTTS(api_key=api_key)
         return EdgeTTS()
-    elif engine_type.lower() == "elevenlabs":
+    elif t == "elevenlabs":
         return ElevenLabsTTS()
+    elif t == "edge":
+        return EdgeTTS()
     else:
-        raise ValueError(f"Unsupported TTS engine_type: {engine_type}")
+        return EdgeTTS()
+

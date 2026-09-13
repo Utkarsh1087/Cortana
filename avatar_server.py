@@ -28,7 +28,7 @@ connected_websockets: Set[WebSocket] = set()
 # Initialize Core Services
 brain = get_llm_provider()
 memory = get_memory_manager("sqlite")
-tts = get_tts_engine("edge")
+tts = get_tts_engine("auto")
 
 # Proactive reminder alert callback
 def on_proactive_alert(msg: str):
