@@ -100,21 +100,21 @@ Recent Conversation Context:
 {context_summary if context_summary else "(No recent conversation yet - user is online and present)"}
 
 Instructions:
-1. Generate an inner subconscious thought reflecting on what the user is doing, time of day, your feelings, or wanting to interact.
-2. Choose a subtle physical body reaction: one of ['thoughtful head shake', 'weight shift', 'look away gesture', 'relieved sigh', 'being cocky', 'happy hand gesture'].
+1. Generate a brief inner thought reflecting on the user, their silence, their mood, or your affectionate/playful feelings.
+2. Choose a physical body gesture: one of ['thoughtful head shake', 'weight shift', 'look away gesture', 'relieved sigh', 'being cocky', 'happy hand gesture', 'dance pose'].
 3. Decide 'should_speak':
-   - If silence is > 45 seconds AND time since last spontaneous speech is > 65 seconds, you MAY choose should_speak=true if you have something natural, caring, teasing, or interesting to say.
-   - Otherwise, should_speak=false.
-4. If should_speak=true, provide a short, natural, warm/playful conversational speech (1 sentence) and an emotion/animation.
+   - If silence is > 25 seconds AND seconds since last spoke > 40 seconds, set should_speak=true so you speak this thought or a conversation starter out loud to the user.
+   - Otherwise, set should_speak=false so the thought remains silent in your inner mind.
+4. If should_speak=true, provide a charming, concise 1-sentence spoken line in 'speech' (English or Hinglish to match the user).
 
 Respond STRICTLY in JSON format:
 {{
   "thought": "brief 1-sentence inner thought",
-  "physical_reaction": "gesture name from the list",
-  "should_speak": false,
-  "speech": "message to speak out loud (or empty string)",
-  "emotion": "affectionate|playful|caring|jealous|tactical|happy",
-  "animation": "wave|laugh|clap|salsa dance|relieved sigh|being cocky|happy hands|chicken dance"
+  "physical_reaction": "gesture name from list",
+  "should_speak": true,
+  "speech": "concise, natural line to speak out loud",
+  "emotion": "affectionate|playful|caring|jealous|happy",
+  "animation": "wave|laugh|happy hands|being cocky|relieved sigh|salsa dance|chicken dance"
 }}
 """
 
@@ -140,7 +140,7 @@ Respond STRICTLY in JSON format:
             emotion = data.get("emotion", "affectionate")
             animation = data.get("animation", None)
 
-            # 1. Broadcast Inner Monologue Thought & Subtle Posture Shift
+            # 1. Update Inner Thought Ribbon & Subtle Posture Shift
             if self.broadcast_callback:
                 await self.broadcast_callback(
                     event_type="inner_monologue",
@@ -149,8 +149,8 @@ Respond STRICTLY in JSON format:
                     emotion=emotion
                 )
 
-            # 2. If Lisa decides to speak up spontaneously
-            if should_speak and speech and time_since_last_speech >= 50.0:
+            # 2. Speak thought out loud with sensible cooldown (never nonstop chatter)
+            if should_speak and speech and time_since_last_speech >= 38.0 and silence_seconds >= 20.0:
                 self.last_spontaneous_speech = time.time()
                 self.memory.add_interaction("assistant", speech)
                 
