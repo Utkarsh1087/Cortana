@@ -1,17 +1,17 @@
-# 🌟 Lisa — Autonomous AI Companion & 3D Holographic Humanoid
+# 🌌 Cortana — Autonomous AI Companion & 3D Holographic Humanoid
 
 <div align="center">
-
-![Lisa Hologram Interface](avatar/models/Textures/preview_banner.png)
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688.svg)](https://fastapi.tiangolo.com/)
 [![Three.js](https://img.shields.io/badge/Three.js-r128-black.svg)](https://threejs.org/)
+[![Google Gemini](https://img.shields.io/badge/Gemini-2.5_Flash-4285F4.svg)](https://ai.google.dev/)
+[![ElevenLabs](https://img.shields.io/badge/ElevenLabs-HD_Voice-orange.svg)](https://elevenlabs.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Lisa** is an open-source, embodied, multimodal AI companion featuring real-time 3D motion-captured kinematics, an autonomous stream of consciousness, multimodal vision, edge voice synthesis, and 56+ autonomous system tools.
+**Cortana** is an open-source, embodied, multimodal AI companion featuring real-time 3D motion-captured kinematics, an autonomous stream of consciousness with circadian awareness, DirectShow multimodal vision, edge neural voice synthesis, and 56+ autonomous system capabilities.
 
-[✨ Key Features](#-key-features) • [🚀 Quick Start](#-quick-start) • [🧠 Autonomous Mind](#-autonomous-mind--stream-of-consciousness) • [💃 3D Avatar & Mocap](#-3d-avatar--mocap-engine) • [🛠️ 56+ Tool Suite](#️-56-integrated-tools) • [⚙️ Architecture](#-system-architecture)
+[✨ Key Features](#-key-features) • [🚀 Quick Start](#-quick-start) • [🧠 Autonomous Subconscious Mind](#-autonomous-subconscious-mind) • [💃 3D Holographic Avatar](#-3d-holographic-avatar) • [🛠️ 56+ Tool Suite](#️-56-integrated-tools--subsystems) • [⚙️ Architecture](#-system-architecture)
 
 </div>
 
@@ -19,148 +19,157 @@
 
 ## ✨ Key Features
 
-- 💃 **Full-Body 3D Motion-Captured Humanoid Avatar**:
-  - Built with **Three.js** and **FBXLoader** with dynamic bone retargeting.
-  - Library of **95+ Mixamo mocap animations** (Salsa dancing, Moonwalk, Breakdancing, Hip-hop, Laughing, Waving, Crying, and emotive body language).
-  - Dynamic **Hologram Palette Switcher** (Cyber Cyan, Neon Rose, Matrix Emerald, Amethyst Purple, Crimson War).
-  - **Pepper's Ghost Mode**: 4-sided projection pyramid rendering for physical holographic displays.
+### 💃 1. Full-Body 3D Motion-Captured Humanoid Avatar
+* **Three.js & WebGL PBR Engine:** High-fidelity 3D humanoid mesh with dynamic bone retargeting and realistic lighting.
+* **95+ Mixamo Mocap Animation Repertoire:** Smooth procedural transitions between conversation gestures, nodding, laughing, waving, formal bowing, and high-energy dances (Salsa, Moonwalk, Breakdance, Hip-hop, Locking, Thriller, Chicken Dance).
+* **Cyberpunk Hologram Palette Switcher:** Real-time visual shader palettes (Cyber Cyan, Neon Rose, Matrix Emerald, Amethyst Purple, Crimson War).
+* **Pepper's Ghost Holographic Mode:** 4-sided viewport rendering designed for physical acrylic holographic projection pyramids.
+* **Neural Viseme Lipsync:** Real-time audio frequency and energy analysis driving dynamic jaw articulation and facial expressions.
 
-- 🧠 **Autonomous Cognition & Stream of Consciousness**:
-  - Independent background mental loop (`autonomous_mind.py`).
-  - Spontaneous thoughts, natural posture shifts, and proactive conversation generation without requiring user prompts.
-  - Live **Pulsing Thought Ribbon** showing real-time internal reflections.
+### 🧠 2. Autonomous Subconscious Mind & Circadian Rhythm
+* **Continuous Background Mental Stream:** Runs an independent, non-blocking subconscious loop (`autonomous_mind.py`) that generates inner thoughts and spontaneous body shifts.
+* **Real-Time Circadian Dynamics:**
+  * *Morning (5 AM – 12 PM):* Cheerful, energized, day planning, and coffee check-ins.
+  * *Afternoon (12 PM – 6 PM):* Focused collaborative work partner, posture, and hydration awareness.
+  * *Evening (6 PM – 11 PM):* Cozy, relaxed, warm conversational banter.
+  * *Late Night (11 PM – 5 AM):* Soft-spoken, caring, teasing about late-night coding habits.
+* **Multi-Track Cognition:** Dynamically balances Curiosity, Affection/Playfulness, Wellbeing/Ergonomics, and Creative Musings.
+* **Live Thought Ribbon:** Renders glowing glassmorphic thought banners above her 3D head in real-time.
 
-- 🗣️ **Lifelike Voice & Audio Pipeline**:
-  - Ultra-fast Neural Speech Synthesis using **Microsoft Edge TTS** (`Jenny`, `Aria`, `Sonia`, `Natasha`, `Neerja`) and **ElevenLabs**.
-  - Local speech-to-text with **Faster-Whisper** and open-source wake-word activation.
-  - Real-time 3D speech visualizer and audio equalizers.
+### 👁️ 3. DirectShow Multimodal Vision & Sentry Patrol
+* **Live Webcam Multimodal Inspection (`capture_webcam_and_analyze`):** Captures 1280x720 frames and runs Gemini 2.5 Flash Vision to inspect what you are wearing, holding, doing, or showing to the camera.
+* **Autonomous Face Recognition & Sentry:** Enrolls trusted user faces into SQLite biometric memory and dispatches intruder alerts.
+* **Physical Document Reader & OCR:** Reads books, handwritten notes, and receipts held in front of the lens.
+* **Posture & Ergonomics Coach:** Analyzes screen distance, slouching, shoulder alignment, and desk lighting.
 
-- 🌐 **Multi-Provider LLM Gateway**:
-  - Native support for **Google Gemini** (Gemini 2.5 / 1.5 Flash), **Groq** (Llama 3.3 70B), **Ollama** (100% local/offline), and **OpenRouter**.
-  - Automatic `[EMOTION: ...]` and `[ANIMATION: ...]` tagging with conversational fallback and learning behaviors.
+### 🗣️ 4. Lifelike Voice & Audio Pipeline
+* **ElevenLabs HD & Edge Neural TTS:** Integrated with permanent high-fidelity voice profiles (`Monika Sogam` and Microsoft Edge Neural voices).
+* **Continuous Hands-Free VAD Listening:** Automatic Acoustic Echo Cancellation and speech gating prevents self-interruption.
+* **Local Faster-Whisper Transcription:** Fast, private CPU/GPU speech-to-text inference.
 
-- 🛠️ **56+ Integrated Tools & Subsystems**:
-  - Local RAG Second Brain vector search, Face Vision Sentry, Floating Screen HUD Annotations, Cellular Twilio Calling, Tactical Scenario Simulations, DevOps Container Tools, and Screen/Webcam Multimodal Analysis.
-
-- 📱 **Omnichannel Interfaces**:
-  - 3D Web Avatar (`http://localhost:8000`).
-  - Voice Interaction Loop (`voice_main.py`).
-  - Telegram Bot Gateway (`telegram_bot.py`).
-  - Translucent Floating Desktop Orb (`desktop_orb.py`).
+### 📱 5. Omnichannel Interfaces
+* **3D Holographic Web Interface:** Interactive browser interface on `http://localhost:8000`.
+* **Hands-Free Voice Terminal:** `python voice_main.py`
+* **Smartphone-to-PC Telegram Sync:** Remote voice note and tool execution via `python telegram_bot.py`.
+* **Floating Desktop Companion Widget:** Translucent screen orb via `python desktop_orb.py`.
 
 ---
 
 ## 🚀 Quick Start
 
-### 1. Clone the Repository
+### 1. Prerequisites & Installation
 ```bash
-git clone https://github.com/yourusername/lisa.git
-cd lisa
-```
+# Clone the repository
+git clone https://github.com/yourusername/Cortana.git
+cd Cortana
 
-### 2. Set Up Virtual Environment & Dependencies
-```bash
 # Create and activate virtual environment
 python -m venv .venv
+.venv\Scripts\activate      # Windows PowerShell
+# source .venv/bin/activate # Linux / macOS
 
-# Windows
-.venv\Scripts\activate
-
-# Linux / macOS
-source .venv/bin/activate
-
-# Install dependencies
+# Install required packages
 pip install -r requirements.txt
 ```
 
-### 3. Configure Environment Variables
-Copy `.env.example` to `.env` and configure your preferred LLM provider:
+### 2. Configure Environment Variables
+Copy `.env.example` to `.env` and insert your API keys:
 ```bash
 cp .env.example .env
 ```
-Edit `.env` with your API key:
+Edit `.env`:
 ```ini
 LLM_PROVIDER=gemini
 GEMINI_API_KEY=your_gemini_api_key_here
 GEMINI_MODEL=gemini-2.5-flash
+
+# Optional: ElevenLabs HD Voice Synthesis
+ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 ```
 
-### 4. Launch Lisa 3D Avatar
+### 3. Launch Cortana
+Run the one-click launcher on Windows:
+```cmd
+run_cortana.bat
+```
+Or start the server directly:
 ```bash
 python avatar_server.py
 ```
-Open **[http://localhost:8000](http://localhost:8000)** in your browser to interact with Lisa!
+Open **[http://localhost:8000](http://localhost:8000)** in your web browser.
 
 ---
 
-## 🧠 Autonomous Mind & Stream of Consciousness
+## 🧠 Autonomous Subconscious Mind
 
-Lisa doesn't just passively wait for commands — she possesses an autonomous mental engine:
+Cortana does not simply wait for prompts — her continuous cognition engine processes internal reflections, circadian vibes, and environmental cues:
 
 ```mermaid
-graph TD
-    A[Autonomous Mind Loop] -->|Every 20-45s| B(Generate Inner Subconscious Thought)
-    B --> C{Decision Matrix}
-    C -->|Subconscious Shift| D[Trigger Natural Posture / Gesture]
-    C -->|Deep Interest| E[Proactive Speech Event -> WebSocket]
-    C -->|Internal Reflection| F[Update Thought Ribbon UI]
+flowchart TD
+    A[Background Cognition Loop] --> B[Circadian Phase & Time Check]
+    A --> C[Non-Blocking Visual Environment Sampling]
+    A --> D[Episodic Memory & User Preferences]
+    
+    B --> E[Multi-Track Subconscious Stream]
+    C --> E
+    D --> E
+    
+    E --> F[Generate Inner Thought & Body Gesture]
+    F --> G[Broadcast Thought Ribbon to 3D Avatar WebGL]
+    
+    F --> H{Silence > 25s & Cooldown Met?}
+    H -- Yes --> I[Proactive Spoken Interaction via TTS]
+    H -- No --> J[Remain Silent Inner Reflection]
 ```
-
-- **Always-On Consciousness**: Lisa continuously thinks in the background, evolving her thoughts and body language naturally.
-- **Thought Ribbon**: Observe what Lisa is thinking in real time at the top of the interface.
 
 ---
 
-## 💃 3D Avatar & Mocap Engine
+## 🛠️ 56+ Integrated Tools & Subsystems
 
-Lisa's physical body supports natural conversational gestures and full-body dance choreography:
+Cortana is equipped with 56 registered autonomous tools:
 
-| Category | Available Animations |
-|---|---|
-| **Dances** | Salsa Dancing, Moonwalk, Breakdance (1990, Freezes, Swipes, Uprock), Hip-Hop, Locking, Tutting, Thriller, Chicken Dance, Swing |
-| **Conversational** | Waving, Quick Bow, Clapping, Laughing, Relieved Sigh, Thoughtful Head Shake, Lengthy Head Nod, Sarcastic Nod |
-| **Emotive** | Excited, Angry Point, Yelling, Arguing, Looking Away, Dismissing Gesture, Disappointed, Rejected, Cocky |
-| **Idles** | Relaxed Weight Shift, Happy Idle, Sad Idle, Tactile Float |
-
-> **Flirty Learning Rule**: If you ask Lisa to perform an animation not currently in her library (e.g., *backflip* or *tango*), she will playfully let you know and ask you to teach her!
-
----
-
-## 🛠️ 56+ Integrated Tools
-
-```
-Lisa Ecosystem
-├── Autonomous DevOps & Coding    (autonomous_coding_agent, execute_gui_action, backup_workspace)
-├── Vision & Sentry Patrol       (biometric_face_recognition, check_posture, screen_analysis)
-├── Knowledge & Local RAG        (query_second_brain, index_second_brain_folder, summarize_web)
-├── Screen HUD & Floating Orb     (draw_hud_screen_annotation, show_hud_screen_banner)
-├── Cellular Telephony            (trigger_cellular_phone_call, schedule_phone_alarm)
-├── Ambient Soundscapes          (spaceship_cabin, cyberpunk_rain, deep_space, fireplace)
-└── Tactical Simulation          (run_scenario_simulation)
-```
+| Category | Key Capabilities |
+| :--- | :--- |
+| **👁️ Vision & Multimodal** | `capture_webcam_and_analyze`, `check_camera_status`, `detect_user_presence`, `check_posture_and_ergonomics`, `read_physical_document`, `analyze_outfit_and_style`, `scan_qr_from_webcam`, `take_security_snapshot`, `take_screenshot`, `analyze_screen` |
+| **🛡️ Biometrics & Sentry** | `biometric_face_recognition`, `toggle_face_sentry_mode`, `read_user_facial_emotion`, `set_lisa_facial_expression` |
+| **🧠 Memory & Second Brain** | `query_second_brain`, `index_second_brain_folder`, `set_user_preference`, `list_user_preferences` |
+| **🖥️ Screen HUD & Overlays** | `draw_hud_screen_annotation`, `show_hud_screen_banner` |
+| **📞 Cellular & Telephony** | `trigger_cellular_phone_call`, `schedule_phone_alarm` |
+| **🎮 Tactical Simulations** | `run_scenario_simulation` (Cortana Multi-Branch Holographic HUD) |
+| **⚙️ Autonomous DevOps** | `autonomous_coding_agent`, `autonomous_browser_task`, `execute_gui_action`, `manage_docker_and_containers`, `manage_dev_servers`, `backup_workspace`, `git_helper`, `create_git_commit` |
+| **⏰ Cron & Productivity** | `manage_cron_monitoring`, `draft_or_send_email`, `create_or_search_notes`, `add_reminder`, `create_calendar_event`, `get_daily_productivity_score`, `get_morning_briefing` |
+| **🎵 Audio & Equalizers** | `play_ambient_soundscape`, `play_music`, `set_system_volume`, `modulate_voice_emotion`, `switch_female_voice` |
 
 ---
 
 ## ⚙️ System Architecture
 
-```
-├── avatar/                     # 3D Holographic Frontend
-│   ├── index.html              # Modern glassmorphism UI & Three.js canvas
-│   ├── avatar.js               # Kinematics, bone retargeting & animation mixer
-│   ├── style.css               # Cyberpunk & holographic styling
-│   └── models/                 # 3D Humanoid Mesh & 95 Mixamo Mocap FBX Files
-├── autonomous_mind.py          # Autonomous Cognition & Proactive Stream of Consciousness
-├── avatar_server.py            # FastAPI + WebSocket Server for 3D Client
-├── config.py                   # System prompt, emotion parser & multi-LLM configuration
-├── llm.py                      # Multi-provider LLM gateway (Gemini, Groq, Ollama, OpenRouter)
-├── tts.py                      # Neural text-to-speech engine (Edge-TTS & ElevenLabs)
-├── stt.py                      # Faster-Whisper audio transcription
-├── memory.py                   # Persistent SQLite conversation & emotional memory
-├── tools.py                    # 56+ tool definitions & execution engine
-├── rag_engine.py               # Local vector search second brain
-├── desktop_orb.py              # Floating translucent desktop widget
-├── telegram_bot.py             # Telegram gateway
-└── requirements.txt            # Python dependencies
+```mermaid
+flowchart LR
+    subgraph Frontend["3D Holographic Frontend (Three.js)"]
+        UI[WebGL Avatar & HUD Ribbon]
+        AudioIn[Hands-Free VAD Microphone]
+        AudioOut[Neural Viseme Lipsync]
+    end
+
+    subgraph Backend["FastAPI & Python Core (avatar_server.py)"]
+        WS[WebSocket Bridge]
+        Mind[Autonomous Mind Engine]
+        LLM[LLM Gateway: Gemini / Groq]
+        Tools[56+ Autonomous Capability Tools]
+        Vision[DirectShow Face Vision Engine]
+        TTS[ElevenLabs / Edge TTS Pipeline]
+        DB[(SQLite Persistent Memory & RAG)]
+    end
+
+    UI <-->|WebSocket State & Visemes| WS
+    AudioIn -->|VAD Speech Stream| LLM
+    Mind -->|Thoughts & Gestures| WS
+    LLM --> Tools
+    LLM --> TTS
+    Tools <--> DB
+    Vision <--> Tools
+    TTS --> AudioOut
 ```
 
 ---

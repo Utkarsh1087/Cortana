@@ -24,6 +24,7 @@ venv.bak/
 *.sqlite
 *.sqlite3
 lisa_memory.db
+cortana_memory.db
 .orb_state.json
 
 # Logs, Backups & Generated Runtime Files
@@ -31,7 +32,10 @@ lisa_memory.db
 logs/
 backups/
 simulations/
+security_snapshots/
 screenshot_*.png
+temp_*.png
+temp_*.jpg
 *.tmp
 
 # Dynamic Tool Sandboxes
