@@ -77,20 +77,34 @@ autonomous_mind.broadcast_callback = on_autonomous_mind_event
 import re
 
 def parse_llm_response_tags(raw_text: str):
-    """Extract [EMOTION: ...] and [ANIMATION: ...] tags from LLM output, returning clean text & metadata."""
+    """Extract [EMOTION: ...] and [ANIMATION: ...] tags from LLM output, returning clean spoken text & metadata."""
+    if not raw_text:
+        return "", "affectionate", None
+
     emotion = "affectionate"
     animation = None
     
-    emotion_match = re.search(r'\[EMOTION:\s*([a-zA-Z_\-]+)\]', raw_text, re.IGNORECASE)
+    # Check for [EMOTION: ...] or Emotion: ...
+    emotion_match = re.search(r'\[\s*EMOTION:\s*([a-zA-Z_\-]+)\s*\]', raw_text, re.IGNORECASE)
+    if not emotion_match:
+        emotion_match = re.search(r'(?:^|\n|\.\s+)Emotion:\s*([a-zA-Z_\-]+)', raw_text, re.IGNORECASE)
     if emotion_match:
         emotion = emotion_match.group(1).lower().strip()
     
-    anim_match = re.search(r'\[ANIMATION:\s*([^\]]+)\]', raw_text, re.IGNORECASE)
+    # Check for [ANIMATION: ...] or Animation: ...
+    anim_match = re.search(r'\[\s*ANIMATION:\s*([^\]]+)\]', raw_text, re.IGNORECASE)
+    if not anim_match:
+        anim_match = re.search(r'(?:^|\n|\.\s+)Animation:\s*([a-zA-Z0-9_\-\s]+?)(?:\.|$|\n)', raw_text, re.IGNORECASE)
     if anim_match:
         animation = anim_match.group(1).lower().strip()
         
-    clean_text = re.sub(r'\[(EMOTION|ANIMATION):\s*[^\]]+\]', '', raw_text, flags=re.IGNORECASE).strip()
-    clean_text = re.sub(r'\s+', ' ', clean_text)
+    # Strip all metadata tags, actions, asterisks, and prefixes
+    clean_text = re.sub(r'\[\s*(?:EMOTION|ANIMATION|ACTION|GESTURE|THOUGHT|MOOD|STAGE|POSE):?\s*[^\]]*\]', '', raw_text, flags=re.IGNORECASE)
+    clean_text = re.sub(r'\[[A-Za-z0-9_\-\s]+:\s*[^\]]+\]', '', clean_text)
+    clean_text = re.sub(r'(?:^|\n|\.\s+)(?:Emotion|Emotions|Animation|Animations|Gesture|Mood):\s*[a-zA-Z0-9_\-\s]+(?:\.|$|\n)', ' ', clean_text, flags=re.IGNORECASE)
+    clean_text = re.sub(r'\*[^*]+\*', '', clean_text)
+    clean_text = re.sub(r'\((?:smiles|smiling|giggles|giggling|laughs|laughing|sighs|sighing|pauses|whispers|winks|nodding|shaking head)[^)]*\)', '', clean_text, flags=re.IGNORECASE)
+    clean_text = re.sub(r'\s+', ' ', clean_text).strip()
     
     return clean_text, emotion, animation
 

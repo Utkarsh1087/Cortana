@@ -102,14 +102,16 @@ def main():
             context = memory.get_recent_context(limit=10)
             
             print("🤔 Lisa is thinking & executing tools if needed...", end="\r", flush=True)
-            response = brain.generate_response(context, tool_registry=registry)
+            raw_response = brain.generate_response(context, tool_registry=registry)
+            from tts import sanitize_speech_text
+            clean_response = sanitize_speech_text(raw_response)
             
-            print(f"Lisa: {response}\n")
-            memory.add_interaction("assistant", response)
+            print(f"Lisa: {clean_response}\n")
+            memory.add_interaction("assistant", clean_response)
 
             # Step E: Speak the response via TTS
             print("🔊 Speaking...", end="\r", flush=True)
-            tts.speak(response)
+            tts.speak(clean_response)
             time.sleep(0.35) # Echo-suppression: prevent mic from capturing trailing speaker audio
 
         except KeyboardInterrupt:

@@ -845,7 +845,15 @@ function setAvatarState(state, text = null, emotion = null, animation = null) {
     }
 
     if (text && responseEl) {
-        responseEl.textContent = text;
+        // Strip any residual metadata tags, actions, or stage directions
+        const cleanDisplay = text
+            .replace(/\[\s*(?:EMOTION|ANIMATION|ACTION|GESTURE|THOUGHT|MOOD|STAGE|POSE):?[^\]]*\]/gi, '')
+            .replace(/\[[A-Za-z0-9_\-\s]+:[^\]]+\]/g, '')
+            .replace(/(?:^|\n|\.\s+)(?:Emotion|Emotions|Animation|Animations|Gesture|Mood):\s*[a-zA-Z0-9_\-\s]+(?:\.|$|\n)/gi, ' ')
+            .replace(/\*[^*]+\*/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+        responseEl.textContent = cleanDisplay;
     }
     if (emotion && EMOTION_AURAS[emotion]) {
         setEmotionState(emotion);

@@ -28,6 +28,43 @@ EMOTION_PROFILES = {
 }
 
 import threading
+import re
+
+def sanitize_speech_text(text: str) -> str:
+    """
+    Remove all metadata tags, stage directions, animation/emotion commands,
+    asterisks, parentheses actions, markdown symbols, and emojis so TTS only speaks natural speech.
+    """
+    if not text:
+        return ""
+    
+    clean = text
+    # 1. Remove bracketed metadata e.g. [EMOTION: ...], [ANIMATION: ...], [ACTION: ...], [THOUGHT: ...]
+    clean = re.sub(r'\[\s*(?:EMOTION|ANIMATION|ACTION|GESTURE|THOUGHT|MOOD|STAGE|POSE):?\s*[^\]]*\]', '', clean, flags=re.IGNORECASE)
+    clean = re.sub(r'\[[A-Za-z0-9_\-\s]+:\s*[^\]]+\]', '', clean)
+    
+    # 2. Remove loose line or prefix patterns e.g. "Emotion: happy", "Animation: wave"
+    clean = re.sub(r'(?:^|\n|\.\s+)(?:Emotion|Emotions|Animation|Animations|Gesture|Mood):\s*[a-zA-Z0-9_\-\s]+(?:\.|$|\n)', ' ', clean, flags=re.IGNORECASE)
+    
+    # 3. Remove stage directions in asterisks e.g. *smiles warmly*, *sighs*, *giggles*, *laughs*
+    clean = re.sub(r'\*[^*]+\*', '', clean)
+    
+    # 4. Remove stage directions in parentheses e.g. (smiles), (giggling softly), (sighs)
+    clean = re.sub(r'\((?:smiles|smiling|giggles|giggling|laughs|laughing|sighs|sighing|pauses|whispers|winks|nodding|shaking head)[^)]*\)', '', clean, flags=re.IGNORECASE)
+    
+    # 5. Remove markdown syntax like **, __, #, >, `
+    clean = re.sub(r'[*_#>`~]', '', clean)
+    
+    # 6. Remove URLs
+    clean = re.sub(r'https?://\S+', '', clean)
+    
+    # 7. Remove emojis so TTS does not pronounce emoji descriptions
+    clean = re.sub(r'[\U00010000-\U0010ffff]', '', clean)
+    clean = re.sub(r'[\u2600-\u27BF\uE000-\uF8FF]', '', clean)
+    
+    # 8. Normalize multiple spaces/newlines
+    clean = re.sub(r'\s+', ' ', clean).strip()
+    return clean
 
 # Global Speech Mutex Lock to prevent overlapping/clashing voices
 _speech_lock = threading.Lock()
@@ -35,6 +72,9 @@ _is_speaking = False
 
 def _sapi_female_speak(text: str) -> None:
     """Offline Windows fallback strictly using female voices (e.g. Zira)."""
+    clean_text = sanitize_speech_text(text)
+    if not clean_text:
+        return
     try:
         import win32com.client
         speaker = win32com.client.Dispatch("SAPI.SpVoice")
@@ -43,7 +83,7 @@ def _sapi_female_speak(text: str) -> None:
             if any(name in desc for name in ["zira", "female", "eva", "hazel", "susan", "catherine", "heera"]):
                 speaker.Voice = voice
                 break
-        speaker.Speak(text)
+        speaker.Speak(clean_text)
     except Exception:
         pass
 
@@ -78,7 +118,8 @@ class EdgeTTS(BaseTTS):
 
     def speak(self, text: str, rate: Optional[str] = None, pitch: Optional[str] = None) -> None:
         global ACTIVE_VOICE, _is_speaking
-        if not text.strip():
+        clean_text = sanitize_speech_text(text)
+        if not clean_text:
             return
             
         with _speech_lock:
@@ -90,7 +131,7 @@ class EdgeTTS(BaseTTS):
         # Broadcast speaking state to live desktop orb and web avatar
         try:
             from orb_bridge import update_orb_state
-            update_orb_state("speaking", energy=0.75, text=text)
+            update_orb_state("speaking", energy=0.75, text=clean_text)
         except Exception:
             pass
 
@@ -105,7 +146,7 @@ class EdgeTTS(BaseTTS):
 
                     voice_to_use = ACTIVE_VOICE
                     communicate = edge_tts.Communicate(
-                        text,
+                        clean_text,
                         voice_to_use,
                         rate=rate_val,
                         pitch=pitch_val
@@ -124,7 +165,7 @@ class EdgeTTS(BaseTTS):
                         await asyncio.sleep(0.5)
                         continue
                     # On repeated network timeout, use offline female Windows SAPI fallback
-                    _sapi_female_speak(text)
+                    _sapi_female_speak(clean_text)
                     return
                 finally:
                     try:
@@ -140,7 +181,7 @@ class EdgeTTS(BaseTTS):
         try:
             asyncio.run(_generate_and_play())
         except Exception:
-            _sapi_female_speak(text)
+            _sapi_female_speak(clean_text)
         finally:
             _is_speaking = False
             try:
@@ -186,9 +227,13 @@ class ElevenLabsTTS(BaseTTS):
             pass
 
     def speak(self, text: str, rate: Optional[str] = None, pitch: Optional[str] = None) -> None:
+        clean_text = sanitize_speech_text(text)
+        if not clean_text:
+            return
+
         if not self.api_key or self.api_key == "your_elevenlabs_api_key_here":
             # Fallback to EdgeTTS
-            EdgeTTS().speak(text, rate=rate, pitch=pitch)
+            EdgeTTS().speak(clean_text, rate=rate, pitch=pitch)
             return
 
         from elevenlabs.client import ElevenLabs
@@ -196,7 +241,7 @@ class ElevenLabsTTS(BaseTTS):
 
         client = ElevenLabs(api_key=self.api_key)
         audio = client.generate(
-            text=text,
+            text=clean_text,
             voice=self.voice_id,
             model="eleven_monolingual_v1"
         )
