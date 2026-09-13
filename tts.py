@@ -212,8 +212,8 @@ class ElevenLabsTTS(BaseTTS):
     """
     def __init__(self, api_key: str = None, voice_id: str = None, model_id: str = "eleven_flash_v2_5"):
         self.api_key = api_key or os.getenv("ELEVENLABS_API_KEY")
-        # Default: Rachel (21m00Tcm4TlvDq8ikWAM) or Sarah (EXAVITQu4vr4xnSDxMaL)
-        self.voice_id = voice_id or os.getenv("ELEVENLABS_VOICE_ID") or "21m00Tcm4TlvDq8ikWAM"
+        # Default: Sarah (EXAVITQu4vr4xnSDxMaL) - Warm, reassuring companion
+        self.voice_id = voice_id or os.getenv("ELEVENLABS_VOICE_ID") or "EXAVITQu4vr4xnSDxMaL"
         self.model_id = model_id # Flash v2.5 consumes 50% fewer credits with ultra-low latency
         self._edge_fallback = EdgeTTS()
         try:
@@ -240,18 +240,38 @@ class ElevenLabsTTS(BaseTTS):
             return
 
         try:
-            from elevenlabs.client import ElevenLabs
+            import requests
             import io
 
-            client = ElevenLabs(api_key=self.api_key)
-            audio = client.generate(
-                text=clean_text,
-                voice=self.voice_id,
-                model=self.model_id
-            )
+            headers = {
+                "xi-api-key": self.api_key,
+                "Content-Type": "application/json"
+            }
+            body = {
+                "text": clean_text,
+                "model_id": self.model_id,
+                "voice_settings": {
+                    "stability": 0.55,
+                    "similarity_boost": 0.75,
+                    "style": 0.35,
+                    "use_speaker_boost": True
+                }
+            }
             
-            audio_bytes = b"".join(audio)
-            audio_file = io.BytesIO(audio_bytes)
+            url = f"https://api.elevenlabs.io/v1/text-to-speech/{self.voice_id}"
+            res = requests.post(url, json=body, headers=headers, timeout=12)
+            
+            if res.status_code != 200:
+                # If specific voice is restricted on free tier, try Sarah default or fallback
+                if self.voice_id != "EXAVITQu4vr4xnSDxMaL":
+                    fallback_url = "https://api.elevenlabs.io/v1/text-to-speech/EXAVITQu4vr4xnSDxMaL"
+                    res = requests.post(fallback_url, json=body, headers=headers, timeout=12)
+                
+                if res.status_code != 200:
+                    self._edge_fallback.speak(clean_text, rate=rate, pitch=pitch)
+                    return
+
+            audio_file = io.BytesIO(res.content)
             
             with _speech_lock:
                 self.stop()
@@ -259,8 +279,7 @@ class ElevenLabsTTS(BaseTTS):
                 pygame.mixer.music.play()
                 while pygame.mixer.music.get_busy():
                     pygame.time.Clock().tick(10)
-        except Exception as e:
-            # On any credit exhaustion or network error, fallback seamlessly to EdgeTTS
+        except Exception:
             self._edge_fallback.speak(clean_text, rate=rate, pitch=pitch)
 
 
