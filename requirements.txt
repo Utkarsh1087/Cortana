@@ -1,0 +1,36 @@
+python-dotenv>=1.0.0
+# LLM Providers
+google-genai>=2.19.0
+groq>=0.11.0
+openai>=1.0.0
+
+# Voice I/O (Stage 2)
+sounddevice>=0.5.0
+numpy>=1.26.0
+scipy>=1.12.0
+faster-whisper>=1.0.0
+edge-tts>=7.0.0
+pygame>=2.6.0
+openwakeword>=0.6.0
+
+# Web Search (Stage 5)
+ddgs>=9.0.0
+
+# Web Avatar & Hologram Server (Stage 6)
+fastapi>=0.110.0
+uvicorn>=0.30.0
+websockets>=12.0.0
+
+# Telegram Bot
+python-telegram-bot>=20.0
+
+# Proactive Sentinel & System
+psutil>=5.9.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+
+# Optional / Enhanced Capabilities
+# RAG & Embeddings: chromadb>=0.4.0, sentence-transformers>=2.2.0, pypdf>=3.0.0
+# Vision & Face: opencv-python>=4.8.0, mediapipe>=0.10.0
+# Phone Calling: twilio>=8.0.0
+# Translucent Screen HUD: PyQt5>=5.15.0

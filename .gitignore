@@ -1,0 +1,47 @@
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+
+# Python runtime and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environments
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Local Databases & State
+*.db
+*.sqlite
+*.sqlite3
+lisa_memory.db
+.orb_state.json
+
+# Logs, Backups & Generated Runtime Files
+*.log
+logs/
+backups/
+simulations/
+screenshot_*.png
+*.tmp
+
+# Dynamic Tool Sandboxes
+custom_tools_sandbox/
+custom_tools/
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.agents/
+.gemini/

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lisa — Next-Gen 3D Human Avatar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- Three.js Suite & Loaders -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fflate@0.7.4/umd/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body class="avatar-human theme-dark">
+    <!-- 3D Avatar WebGL Canvas -->
+    <div id="canvas-container"></div>
+
+    <!-- UI Overlay Layer -->
+    <div class="interface-layer">
+        <!-- Top Navigation Bar -->
+        <header class="top-bar">
+            <div class="brand-section">
+                <div class="assistant-name">
+                    <span class="pulse-dot"></span>
+                    <span class="name-text">Lisa</span>
+                </div>
+                
+                <!-- Avatar Styling Presets -->
+                <div class="preset-selector">
+                    <button class="preset-btn active" onclick="switchAvatarPreset('girl3d')" title="Natural Realistic PBR Textures">👑 Realistic PBR</button>
+                    <button class="preset-btn" onclick="switchAvatarPreset('cyberpunk')" title="Cyberpunk Neon Glow">⚡ Cyberpunk</button>
+                    <button class="preset-btn" onclick="switchAvatarPreset('hologram')" title="Sci-Fi Hologram Matrix">✨ Hologram</button>
+                </div>
+            </div>
+
+            <!-- Emotion & Mood Selector + Autonomous Mind -->
+            <div class="header-right-group">
+                <div class="emotion-pills">
+                    <button class="emotion-btn active" onclick="setEmotionState('affectionate')" title="Warm & Affectionate">💖 Affectionate</button>
+                    <button class="emotion-btn" onclick="setEmotionState('playful')" title="Playful & Winking">✨ Playful</button>
+                    <button class="emotion-btn" onclick="setEmotionState('caring')" title="Caring & Empathetic">🌿 Caring</button>
+                    <button class="emotion-btn" onclick="setEmotionState('jealous')" title="Possessive & Pouting">🔥 Jealous</button>
+                    <button class="emotion-btn" onclick="setEmotionState('tactical')" title="Focused & Direct">⚡ Tactical</button>
+                </div>
+                <button id="mind-toggle-btn" class="mind-toggle-btn active" onclick="toggleAutonomousMind()" title="Autonomous Stream of Consciousness: Spontaneous thoughts & conversations">🧠 Mind: ON</button>
+            </div>
+        </header>
+
+        <!-- Center Subtitles, Inner Thought Stream & Visualizer -->
+        <div class="center-content">
+            <!-- Inner Monologue Thought Stream -->
+            <div class="inner-thought-pill" id="inner-thought-pill">
+                <span class="thought-sparkle">✨</span>
+                <span class="thought-text" id="thought-text">Consciousness active • Thinking in background</span>
+            </div>
+
+            <div class="status-indicator" id="status-indicator">Lisa • Ready</div>
+            <div class="response-text" id="response-text">Hello! I'm online and listening. How can I help you today?</div>
+            
+            <!-- Quick Gestures & Mocap Dances Toolbar -->
+            <div class="gesture-bar">
+                <button class="gesture-pill-btn" onclick="triggerCustomGesture('wave')" title="Wave Hello">👋 Wave</button>
+                <button class="gesture-pill-btn" onclick="triggerCustomGesture('salsa')" title="Salsa Dancing">💃 Salsa</button>
+                <button class="gesture-pill-btn" onclick="triggerCustomGesture('moonwalk')" title="Michael Jackson Moonwalk">🕺 Moonwalk</button>
+                <button class="gesture-pill-btn" onclick="triggerCustomGesture('breakdance')" title="Breakdance Freezes">🤸‍♂️ Breakdance</button>
+                <button class="gesture-pill-btn" onclick="triggerCustomGesture('clap')" title="Applaud / Clap">👏 Clap</button>
+                <button class="gesture-pill-btn" onclick="triggerCustomGesture('laugh')" title="Laughing Out Loud">😂 Laugh</button>
+                <button class="gesture-pill-btn" onclick="triggerCustomGesture('chicken dance')" title="Fun Chicken Dance">🐔 Chicken Dance</button>
+                <button class="gesture-pill-btn" onclick="triggerCustomGesture('bow')" title="Respectful Bow">🙇‍♀️ Bow</button>
+            </div>
+        </div>
+
+        <!-- Floating Glass Input Bar with Real-Time Audio Viseme Meter -->
+        <footer class="bottom-bar">
+            <form id="chat-form" class="pill-input-form" onsubmit="handleChatSubmit(event)">
+                <input type="text" id="chat-input" placeholder="Speak to Lisa or type a message..." autocomplete="off" />
+                <button type="button" id="mic-btn" class="icon-btn mic-btn" title="Voice Input (Click to speak)" onclick="toggleVoiceRecording()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                        <line x1="8" y1="23" x2="16" y2="23"></line>
+                    </svg>
+                </button>
+                <button type="submit" id="send-btn" class="icon-btn send-btn" aria-label="Send Message">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="19" x2="12" y2="5"></line>
+                        <polyline points="5 12 12 5 19 12"></polyline>
+                    </svg>
+                </button>
+            </form>
+        </footer>
+    </div>
+
+
+
+    <script src="/static/avatar.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "name": "relaxedpose",
+  "display_name": "RelaxedPose",
+  "trigger_words": [
+    "relax",
+    "chill"
+  ],
+  "duration": 2.5,
+  "frames": [
+    {
+      "time": 0.0,
+      "leftArm": {
+        "x": 0,
+        "y": 0,
+        "z": 1.38
+      },
+      "rightArm": {
+        "x": 0,
+        "y": 0,
+        "z": -1.38
+      }
+    }
+  ],
+  "emotion": "friendly",
+  "created_at": "2026-09-13 13:54:38"
+}
