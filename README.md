@@ -213,34 +213,34 @@ flowchart LR
 
 > ### 💬 A Note from the Creator
 > 
-> Cortana is in an early, experimental stage of development. My goal is to build an open-source, embodied companion that feels genuinely alive, intuitive, and helpful.
+> Cortana is actively in an early, experimental development stage. My goal is to build an open-source, embodied AI companion that feels genuinely alive, intuitive, emotionally attuned, and helpful.
 > 
-> To be completely honest, I do not know if all the current tech choices, models, and architectural patterns are the absolute best ones. I am actively experimenting, learning, and figuring things out as I build.
+> **To be completely transparent:** I don't know if all the current tech choices, models, frameworks, and architectural decisions are 100% the best possible ones. I am actively experimenting, learning, and figuring things out as I build.
 > 
-> **I would love help, advice, and ideas from the community.** Whether you are working on AI research, 3D graphics, backend systems, or just experimenting:
-> - 🛠️ **New Tools and Functions:** What capabilities, integrations, PC automations, or physical sensors would make her more useful?
-> - 🧠 **Cognition and Memory:** Ideas for better RAG pipelines, long-term memory graphs, or more natural subconscious loops.
-> - 🤖 **Models and Tech Stack:** Suggestions for faster or more expressive LLMs, local vision models, and low-latency voice pipelines.
-> - 💃 **3D Graphics and Kinematics:** Smoother Three.js shaders, ARKit blendshapes, procedural bone movements, or WebGL performance improvements.
-> - ⚡ **Architecture and Refactoring:** Cleaner design patterns, bug fixes, or performance tweaks.
+> **I am openly asking for help and ideas from the community!** Whether you're an AI researcher, frontend/3D developer, backend engineer, or enthusiast:
+> - 🛠️ **New Tools & Functions:** What tools, APIs, PC automations, or physical sensors should Cortana have?
+> - 🧠 **Cognition & Memory:** Suggestions for better Vector RAG pipelines, hierarchical episodic memory, or smarter subconscious thought loops.
+> - 🤖 **Models & Tech Stack:** Recommendations for more expressive LLMs, faster local vision models, or ultra-low-latency voice pipelines.
+> - 💃 **3D Graphics & Kinematics:** Smoother Three.js shaders, ARKit blendshapes, procedural bone kinematics, or WebGL performance tricks.
+> - ⚡ **Refactoring & Architecture:** Any cleaner design patterns, bug fixes, or optimizations.
 > 
-> **Every contribution, whether it is an issue discussion, an architectural suggestion, or a pull request, is warmly welcomed.**
+> **Any contribution, whether it's advice in an issue, an architectural critique, or a full pull request, is wholeheartedly encouraged!**
 
 ---
 
 ### ⭐ Support the Project
-If you find this project interesting or inspiring, please consider **leaving a star on GitHub**. It helps the project reach more open-source builders and developers.
+If you find this project exciting, inspiring, or useful, please consider **dropping a ⭐ star on GitHub**! It motivates continued development and helps bring more open-source builders together.
 
 ---
 
 ### 🤝 How to Contribute
-1. **Star and Fork the Repository** to follow along with progress.
-2. **Open an Issue or Discussion** to share ideas, give feedback, or report bugs.
+1. **Star & Fork the Repository** to follow along with updates.
+2. **Open an Issue or Discussion** to brainstorm features, share advice, or report bugs.
 3. **Submit a Pull Request:**
-   - Create a feature branch (`git checkout -b feature/amazing-feature`)
-   - Commit your work (`git commit -m "Add new multimodal tool"`)
-   - Push to your branch (`git push origin feature/amazing-feature`)
-   - Open a **Pull Request** and let's build together!
+   - Create a feature branch (`git checkout -b feature/amazing-enhancement`)
+   - Commit your changes (`git commit -m "Add new multimodal tool"`)
+   - Push to your branch (`git push origin feature/amazing-enhancement`)
+   - Open a **Pull Request** and let's collaborate!
 
 ---
 
