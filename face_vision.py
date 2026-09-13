@@ -1,10 +1,7 @@
-"""
-Facial Recognition & Sentry Patrol Module for Lisa AI.
-Enables user face enrollment, live webcam identity detection, personalized greetings,
-and autonomous sentry patrol with Telegram intruder alerts.
-"""
-
 import os
+os.environ["OPENCV_VIDEOIO_PRIORITY_MSMF"] = "0"
+os.environ["OPENCV_LOG_LEVEL"] = "ERROR"
+
 import time
 import json
 import sqlite3
@@ -36,36 +33,38 @@ class FaceVisionEngine:
             conn.commit()
 
     def capture_webcam_frame(self, index: Optional[int] = None):
-        """Captures a single high-quality BGR frame from webcam with multi-backend fallbacks."""
+        """Captures a single high-quality BGR frame from webcam cleanly without MSMF conflicts."""
         try:
             import cv2
-            indices_to_try = [0, 1, 2] if index is None else [index]
-            backends = [cv2.CAP_DSHOW, cv2.CAP_MSMF, cv2.CAP_ANY] if os.name == 'nt' else [cv2.CAP_ANY]
+            indices_to_try = [0, 1] if index is None else [index]
+            backends = [cv2.CAP_DSHOW, cv2.CAP_ANY] if os.name == 'nt' else [cv2.CAP_ANY]
             
             for idx in indices_to_try:
                 for backend in backends:
+                    cap = None
                     try:
                         cap = cv2.VideoCapture(idx, backend)
                         if not cap.isOpened():
-                            cap.release()
+                            if cap is not None: cap.release()
                             continue
-                        # Attempt standard resolution
+                        
                         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
                         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
                         
-                        # Discard first few frames to let sensor auto-expose & adjust white balance
                         frame = None
                         for _ in range(5):
                             ret, f = cap.read()
                             if ret and f is not None:
                                 frame = f
-                            time.sleep(0.04)
+                            time.sleep(0.03)
                             
                         cap.release()
                         if frame is not None and frame.size > 0:
                             return frame
                     except Exception:
-                        pass
+                        if cap is not None:
+                            try: cap.release()
+                            except Exception: pass
         except Exception as e:
             print(f"[FaceVision Error capturing frame]: {e}")
         return None
