@@ -7,12 +7,10 @@ with environmental visual awareness, circadian mood evolution, and deep episodic
 import os
 import time
 import json
-import random
 import asyncio
 import datetime
 from typing import Callable, Optional, Dict, Any, List
 
-import config
 from memory import get_memory_manager
 from llm import get_llm_provider
 from preferences import preference_manager

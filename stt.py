@@ -1,9 +1,7 @@
-import os
 import io
 import time
 import numpy as np
 import sounddevice as sd
-import scipy.io.wavfile as wav
 from abc import ABC, abstractmethod
 
 class BaseSTT(ABC):

@@ -6,10 +6,8 @@ failure points, and generates an interactive Cyberpunk Tactical Simulation HUD.
 
 import os
 import json
-import random
 import datetime
-import urllib.parse
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any
 import config
 from google import genai
 

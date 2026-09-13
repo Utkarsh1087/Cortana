@@ -5,7 +5,7 @@ and DSP equalizer presets (Bass Boost, Vocal Clarity, Cinema, Rock, Night Mode) 
 """
 
 import sys
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, Optional
 
 # Equalizer DSP Profiles
 EQUALIZER_PRESETS = {

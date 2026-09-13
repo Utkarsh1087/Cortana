@@ -6,9 +6,7 @@ and trigger cellular wake-up alarms with synthesized speech.
 
 import os
 import time
-import json
 import sqlite3
-import threading
 import datetime
 from typing import Dict, Any, Optional
 

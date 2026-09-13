@@ -1,6 +1,6 @@
 import sqlite3
 import datetime
-from typing import List, Dict, Any, Optional, Tuple
+from typing import List, Dict, Any, Optional
 
 DB_PATH = "lisa_memory.db"
 

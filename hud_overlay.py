@@ -7,7 +7,7 @@ and cyberpunk HUD notification banners directly on top of the user's desktop.
 import time
 import threading
 import tkinter as tk
-from typing import Optional, Dict, Any, List
+from typing import Optional
 
 class HUDOverlayManager:
     def __init__(self):

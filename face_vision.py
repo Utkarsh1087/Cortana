@@ -7,7 +7,7 @@ import json
 import sqlite3
 import datetime
 import threading
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, Optional
 
 class FaceVisionEngine:
     def __init__(self, db_path: str = "lisa_memory.db"):

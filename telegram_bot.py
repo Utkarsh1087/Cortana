@@ -5,23 +5,20 @@ Enables complete smartphone-to-PC assistant control via Telegram voice notes and
 
 import os
 import io
-import asyncio
 import tempfile
-from typing import Optional
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, filters
 from dotenv import load_dotenv
 
-import config
 from llm import get_llm_provider
 from tools import registry
-from memory import memory_manager
-from preferences import preference_manager
+from memory import get_memory_manager
 import self_expansion
 
 load_dotenv()
 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+memory = get_memory_manager("sqlite")
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle /start command."""
@@ -43,11 +40,12 @@ async def handle_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE
     await context.bot.send_chat_action(chat_id=update.effective_chat.id, action="typing")
 
     provider = get_llm_provider()
-    history = memory_manager.get_recent_context(limit=6)
+    history = memory.get_recent_context(limit=6)
     history.append({"role": "user", "content": user_text})
 
     response = provider.generate_response(history, tool_registry=registry)
-    memory_manager.save_interaction(user_text, response)
+    memory.add_interaction("user", user_text)
+    memory.add_interaction("assistant", response)
 
     await update.message.reply_text(response)
 
@@ -74,10 +72,11 @@ async def handle_voice_message(update: Update, context: ContextTypes.DEFAULT_TYP
 
         # 2. Process with LLM Brain + Tools
         provider = get_llm_provider()
-        history = memory_manager.get_recent_context(limit=6)
+        history = memory.get_recent_context(limit=6)
         history.append({"role": "user", "content": transcription})
         response = provider.generate_response(history, tool_registry=registry)
-        memory_manager.save_interaction(transcription, response)
+        memory.add_interaction("user", transcription)
+        memory.add_interaction("assistant", response)
 
         # 3. Generate EdgeTTS voice response (.mp3)
         import edge_tts

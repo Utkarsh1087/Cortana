@@ -9,7 +9,7 @@ import re
 import math
 import sqlite3
 import datetime
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 
 class SecondBrainRAG:
     def __init__(self, db_path: str = "lisa_memory.db"):
