@@ -875,6 +875,12 @@ function setAvatarState(state, text = null, emotion = null, animation = null) {
             currentMocapAction = idleMocapAction;
         }
     }
+    // Echo suppression for Continuous Hands-Free Speech Recognition
+    if (currentState === 'speaking' || currentState === 'thinking') {
+        pauseSpeechRecognition();
+    } else if (currentState === 'idle') {
+        resumeSpeechRecognition();
+    }
 }
 
 // -------------------------------------------------------------
@@ -940,15 +946,16 @@ function displayInnerThought(thought, gesture, emotion) {
 connectWebSocket();
 
 // -------------------------------------------------------------
-// 10. Chat Transmitter & Browser Mic
+// 11. Chat Transmitter & Continuous Hands-Free Listening Engine
 // -------------------------------------------------------------
 async function handleChatSubmit(e) {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     const input = document.getElementById('chat-input');
-    const message = input.value.trim();
+    const message = input ? input.value.trim() : '';
     if (!message) return;
 
-    input.value = '';
+    if (input) input.value = '';
+    pauseSpeechRecognition();
     setAvatarState('thinking', `"${message}"`);
 
     try {
@@ -960,7 +967,7 @@ async function handleChatSubmit(e) {
         const data = await res.json();
         setAvatarState('speaking', data.response);
 
-        const readDuration = Math.max(3500, data.response.length * 55);
+        const readDuration = Math.max(3500, data.response.length * 60);
         setTimeout(() => {
             if (currentState === 'speaking') {
                 setAvatarState('idle', data.response);
@@ -972,55 +979,155 @@ async function handleChatSubmit(e) {
     }
 }
 
+// Continuous Hands-Free Speech Recognition with Auto-Mute Echo Gate
 let recognition = null;
-let isRecording = false;
+let isHandsFreeActive = true;
+let isListening = false;
+let silenceTimer = null;
+let restartTimer = null;
 
-if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+function initContinuousSpeechRecognition() {
+    if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+        console.warn("Continuous speech recognition not supported in this browser.");
+        return;
+    }
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = false;
+    recognition.continuous = true;
+    recognition.interimResults = true;
     recognition.lang = 'en-US';
 
     recognition.onstart = () => {
-        isRecording = true;
-        const micBtn = document.getElementById('mic-btn');
-        if (micBtn) micBtn.classList.add('recording');
-        setAvatarState('listening', 'Listening to your voice...');
+        isListening = true;
+        updateMicButtonUI(true);
     };
 
     recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
+        // If Lisa is currently talking or thinking, ignore captured audio
+        if (currentState === 'speaking' || currentState === 'thinking') {
+            return;
+        }
+
+        let interimTranscript = '';
+        let finalTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+            const transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+                finalTranscript += transcript;
+            } else {
+                interimTranscript += transcript;
+            }
+        }
+
+        const currentText = (finalTranscript || interimTranscript).trim();
+        if (!currentText) return;
+
         const input = document.getElementById('chat-input');
-        if (input) input.value = transcript;
-        handleChatSubmit({ preventDefault: () => {} });
+        if (input) {
+            input.value = currentText;
+        }
+        
+        // Show listening indicator
+        const statusEl = document.getElementById('status-indicator');
+        if (statusEl && currentState === 'idle') {
+            statusEl.className = 'status-indicator listening';
+            statusEl.textContent = 'Lisa • Listening 🎙️';
+        }
+
+        // Voice Activity Detection (VAD) Silence Timer
+        clearTimeout(silenceTimer);
+        const debounceDuration = finalTranscript ? 800 : 1300;
+        
+        silenceTimer = setTimeout(() => {
+            const textToSubmit = input ? input.value.trim() : '';
+            if (textToSubmit && currentState !== 'speaking' && currentState !== 'thinking') {
+                handleChatSubmit({ preventDefault: () => {} });
+            }
+        }, debounceDuration);
     };
 
-    recognition.onerror = () => {
-        isRecording = false;
-        const micBtn = document.getElementById('mic-btn');
-        if (micBtn) micBtn.classList.remove('recording');
-        setAvatarState('idle');
+    recognition.onerror = (e) => {
+        if (e.error !== 'no-speech' && e.error !== 'aborted') {
+            console.log('Speech Recognition:', e.error);
+        }
     };
 
     recognition.onend = () => {
-        isRecording = false;
-        const micBtn = document.getElementById('mic-btn');
-        if (micBtn) micBtn.classList.remove('recording');
+        isListening = false;
+        updateMicButtonUI(false);
+        // Automatic Keepalive Auto-Restart Loop
+        if (isHandsFreeActive && currentState !== 'speaking' && currentState !== 'thinking') {
+            clearTimeout(restartTimer);
+            restartTimer = setTimeout(() => {
+                startSpeechRecognition();
+            }, 300);
+        }
     };
+
+    // Auto-start listening on initial boot
+    startSpeechRecognition();
+}
+
+function startSpeechRecognition() {
+    if (!recognition || !isHandsFreeActive) return;
+    if (currentState === 'speaking' || currentState === 'thinking') return;
+    try {
+        recognition.start();
+    } catch (e) {}
+}
+
+function pauseSpeechRecognition() {
+    clearTimeout(silenceTimer);
+    clearTimeout(restartTimer);
+    if (recognition && isListening) {
+        try {
+            recognition.stop();
+        } catch (e) {}
+    }
+}
+
+function resumeSpeechRecognition() {
+    if (!isHandsFreeActive) return;
+    clearTimeout(restartTimer);
+    // 400ms echo-suppression delay after Lisa stops speaking
+    restartTimer = setTimeout(() => {
+        if (currentState === 'idle') {
+            startSpeechRecognition();
+        }
+    }, 450);
 }
 
 function toggleVoiceRecording() {
-    if (!recognition) {
-        alert("Speech Recognition not supported in this browser. Please use Chrome or Edge.");
-        return;
-    }
-    if (isRecording) {
-        recognition.stop();
+    isHandsFreeActive = !isHandsFreeActive;
+    if (isHandsFreeActive) {
+        startSpeechRecognition();
+        setAvatarState('idle', 'Hands-free continuous listening: LIVE 🎙️');
     } else {
-        try { recognition.start(); } catch (e) { recognition.stop(); }
+        pauseSpeechRecognition();
+        setAvatarState('idle', 'Microphone: MUTED 🔇');
+    }
+    updateMicButtonUI(isHandsFreeActive);
+}
+
+function updateMicButtonUI(active) {
+    const micBtn = document.getElementById('mic-btn');
+    if (micBtn) {
+        micBtn.classList.toggle('recording', active && isHandsFreeActive);
+        micBtn.classList.toggle('muted', !isHandsFreeActive);
+        micBtn.title = isHandsFreeActive ? "Hands-Free Mic: LIVE (Click to mute)" : "Mic: MUTED (Click to unmute)";
     }
 }
+
+// Ensure browser audio/mic permission starts smoothly on user interaction
+document.addEventListener('click', () => {
+    if (isHandsFreeActive && !isListening && currentState === 'idle') {
+        startSpeechRecognition();
+    }
+}, { once: true });
+
+initContinuousSpeechRecognition();
 
 
 
