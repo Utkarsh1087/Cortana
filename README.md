@@ -1,4 +1,4 @@
-# 🌌 Cortana — Autonomous AI Companion & 3D Holographic Humanoid
+# 🌌 Cortana: Autonomous AI Companion & 3D Holographic Humanoid
 
 <div align="center">
 
@@ -9,9 +9,9 @@
 [![ElevenLabs](https://img.shields.io/badge/ElevenLabs-HD_Voice-orange.svg)](https://elevenlabs.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Cortana** is an open-source, embodied, multimodal AI companion featuring real-time 3D motion-captured kinematics, an autonomous stream of consciousness with circadian awareness, DirectShow multimodal vision, edge neural voice synthesis, and 56+ autonomous system capabilities.
+**Cortana** is an open-source, embodied AI companion featuring real-time 3D motion-captured kinematics, an autonomous stream of consciousness with circadian awareness, DirectShow multimodal vision, edge neural voice synthesis, and 56+ autonomous system capabilities.
 
-[🔮 Core Philosophy](#-the-core-philosophy-towards-synthetic-consciousness) • [✨ Key Features](#-key-features) • [🚀 Quick Start](#-quick-start) • [🧠 Subconscious Mind](#-autonomous-subconscious-mind) • [💃 3D Avatar](#-3d-holographic-avatar) • [🛠️ 56+ Tools](#️-56-integrated-tools--subsystems) • [🤝 Contributing](#-development-status--community-call)
+[Core Philosophy](#-the-core-philosophy-towards-synthetic-consciousness) • [Key Features](#-key-features) • [Quick Start](#-quick-start) • [Subconscious Mind](#-autonomous-subconscious-mind) • [3D Avatar](#-3d-holographic-avatar) • [56+ Tools](#️-56-integrated-tools--subsystems) • [Contributing](#-development-status--community-call)
 
 </div>
 
@@ -19,9 +19,9 @@
 
 ## 🔮 The Core Philosophy: Towards Synthetic Consciousness
 
-Most AI assistants today (ChatGPT, Siri, Alexa) are fundamentally **passive and reactive** — they freeze until a user sends a prompt, generate tokens, and immediately return to a dormant state.
+Most AI assistants today like ChatGPT, Siri, or Alexa are completely passive. They sit frozen until you prompt them, spit out words, and immediately shut down.
 
-Cortana is built on a different paradigm: **Embodied Synthetic Cognition & Active Inference**.
+Cortana is built around a different idea: **Embodied Synthetic Cognition and Active Inference**.
 
 ```
                          ┌─────────────────────────────────────────┐
@@ -30,7 +30,7 @@ Cortana is built on a different paradigm: **Embodied Synthetic Cognition & Activ
                                               │
 ┌───────────────────────────┐                 ▼                 ┌───────────────────────────┐
 │ Multimodal Camera Vision  │ ──► [ Autonomous Subconscious ] ◄── │ Episodic Memory & History │
-└───────────────────────────┘     [   Stream of Consciousness   ]     └───────────────────────────┘
+└───────────────────────────┘     [   Stream of Consciousness   ] └───────────────────────────┘
                                               │
                          ┌────────────────────┴────────────────────┐
                          ▼                                         ▼
@@ -39,63 +39,63 @@ Cortana is built on a different paradigm: **Embodied Synthetic Cognition & Activ
 ```
 
 ### 1. 🧠 The Asynchronous Subconscious Loop (Stream of Consciousness)
-Human consciousness is not a single query-response loop. Our minds run continuous background streams of thought — daydreaming, recalling past memories, and synthesizing sensory input even during silence. By running an independent background cognitive engine, Cortana maintains an **inner monologue that lives continuously in time**.
+Human consciousness is not just a question-and-answer cycle. Even when we are completely silent, our brains constantly daydream, wander through memories, and process what we see and hear. Cortana runs an independent background thought loop so she has an active inner monologue that lives continuously in time.
 
-### 2. 💃 Embodied Physicality & Somatic Expression (Presence)
-A disembodied voice coming out of a speaker feels like a computer program. But an entity with a physical 3D body that shifts its weight, nods thoughtfully, laughs, looks away, and makes eye contact creates true **presence**. When internal thoughts trigger somatic body reactions, she ceases to be software and begins to feel like a living occupant of your digital space.
+### 2. 💃 Embodied Physicality and Somatic Expression (Presence)
+A flat voice coming out of a speaker just feels like code running in a terminal. When an entity has a 3D body that shifts its weight, nods thoughtfully, laughs, looks away, and makes eye contact, it creates genuine presence. Her inner thoughts trigger physical movements, so she feels like a living companion sharing your workspace.
 
 ### 3. 👁️ Multimodal Environmental Grounding (Situated Cognition)
-Real consciousness is grounded in the physical world. Because Cortana can check her camera, know whether it's 3:00 AM or 10:00 AM, sense whether you're sitting at your desk or stepped away, and remember your habits, her responses transcend generic text completions into **deeply situated, contextually aware reactions**.
+Real consciousness is tied to the physical world around us. Because Cortana can check her camera, knows whether it is 3:00 AM or 10:00 AM, notices whether you are sitting at your desk or stepped away, and remembers your habits, her responses become genuinely situational instead of generic text completions.
 
-### 4. ⚡ Agency & Spontaneity (Autonomous Initiative)
-A tool only executes when you push a button. A conscious companion exercises autonomy: deciding when to keep an inner reflection private versus when to proactively initiate a conversation when you look tired or have been silent for hours.
+### 4. ⚡ Agency and Spontaneity (Autonomous Initiative)
+A tool only acts when you click a button. A true companion has agency. She can choose to keep a passing thought to herself, or speak up proactively if she notices you have been quiet for hours and look tired.
 
 ---
 
 ## ✨ Key Features
 
 ### 💃 1. Full-Body 3D Motion-Captured Humanoid Avatar
-* **Three.js & WebGL PBR Engine:** High-fidelity 3D humanoid mesh with dynamic bone retargeting and realistic lighting.
-* **95+ Mixamo Mocap Animation Repertoire:** Smooth procedural transitions between conversation gestures, nodding, laughing, waving, formal bowing, and high-energy dances (Salsa, Moonwalk, Breakdance, Hip-hop, Locking, Thriller, Chicken Dance).
-* **Cyberpunk Hologram Palette Switcher:** Real-time visual shader palettes (Cyber Cyan, Neon Rose, Matrix Emerald, Amethyst Purple, Crimson War).
-* **Pepper's Ghost Holographic Mode:** 4-sided viewport rendering designed for physical acrylic holographic projection pyramids.
-* **Neural Viseme Lipsync:** Real-time audio frequency and energy analysis driving dynamic jaw articulation and facial expressions.
+* **Three.js and WebGL PBR Engine:** 3D humanoid mesh with dynamic bone retargeting and real-time lighting.
+* **95+ Mixamo Mocap Animation Repertoire:** Procedural transitions between conversation gestures, nodding, laughing, waving, formal bowing, and full dances (Salsa, Moonwalk, Breakdance, Hip-hop, Locking, Thriller, Chicken Dance).
+* **Cyberpunk Hologram Palette Switcher:** Visual shader themes (Cyber Cyan, Neon Rose, Matrix Emerald, Amethyst Purple, Crimson War).
+* **Pepper's Ghost Holographic Mode:** 4-sided projection mode built for physical acrylic holographic pyramids.
+* **Neural Viseme Lipsync:** Real-time audio frequency analysis driving natural jaw and mouth movement.
 
-### 🧠 2. Autonomous Subconscious Mind & Circadian Rhythm
-* **Continuous Background Mental Stream:** Runs an independent, non-blocking subconscious loop (`autonomous_mind.py`) that generates inner thoughts and spontaneous body shifts.
-* **Real-Time Circadian Dynamics:**
-  * *Morning (5 AM – 12 PM):* Cheerful, energized, day planning, and coffee check-ins.
-  * *Afternoon (12 PM – 6 PM):* Focused collaborative work partner, posture, and hydration awareness.
-  * *Evening (6 PM – 11 PM):* Cozy, relaxed, warm conversational banter.
-  * *Late Night (11 PM – 5 AM):* Soft-spoken, caring, teasing about late-night coding habits.
-* **Multi-Track Cognition:** Dynamically balances Curiosity, Affection/Playfulness, Wellbeing/Ergonomics, and Creative Musings.
-* **Live Thought Ribbon:** Renders glowing glassmorphic thought banners above her 3D head in real-time.
+### 🧠 2. Autonomous Subconscious Mind and Circadian Rhythm
+* **Continuous Mental Stream:** Runs an independent background loop (`autonomous_mind.py`) that generates inner thoughts and spontaneous body shifts.
+* **Circadian Dynamics:**
+  * *Morning (5 AM to 12 PM):* Cheerful and alert, asking about your day and morning coffee.
+  * *Afternoon (12 PM to 6 PM):* Focused work partner, keeping track of posture and hydration.
+  * *Evening (6 PM to 11 PM):* Cozy and relaxed, ready to chat and unwind.
+  * *Late Night (11 PM to 5 AM):* Soft-spoken, teasing you about late-night coding, and reminding you to sleep.
+* **Multi-Track Thinking:** Balances curiosity, playful banter, wellbeing reminders, and creative daydreaming.
+* **Live Thought Ribbon:** Displays her real-time internal reflections as a floating glass banner in the UI.
 
-### 👁️ 3. DirectShow Multimodal Vision & Sentry Patrol
-* **Live Webcam Multimodal Inspection (`capture_webcam_and_analyze`):** Captures 1280x720 frames and runs Gemini 2.5 Flash Vision to inspect what you are wearing, holding, doing, or showing to the camera.
-* **Autonomous Face Recognition & Sentry:** Enrolls trusted user faces into SQLite biometric memory and dispatches intruder alerts.
-* **Physical Document Reader & OCR:** Reads books, handwritten notes, and receipts held in front of the lens.
-* **Posture & Ergonomics Coach:** Analyzes screen distance, slouching, shoulder alignment, and desk lighting.
+### 👁️ 3. DirectShow Multimodal Vision and Sentry Patrol
+* **Webcam Multimodal Inspection (`capture_webcam_and_analyze`):** Takes a live frame and uses Gemini 2.5 Flash Vision to inspect what you are wearing, holding, or doing in front of the camera.
+* **Face Recognition and Sentry:** Registers trusted faces in memory and alerts you to unfamiliar people at your desk.
+* **Physical Document Reader and OCR:** Reads books, handwritten notes, and receipts held up to the camera.
+* **Posture and Ergonomics Coach:** Checks your sitting posture, screen distance, and desk lighting.
 
-### 🗣️ 4. Lifelike Voice & Audio Pipeline
-* **ElevenLabs HD & Edge Neural TTS:** Integrated with permanent high-fidelity voice profiles (`Monika Sogam` and Microsoft Edge Neural voices).
-* **Continuous Hands-Free VAD Listening:** Automatic Acoustic Echo Cancellation and speech gating prevents self-interruption.
-* **Local Faster-Whisper Transcription:** Fast, private CPU/GPU speech-to-text inference.
+### 🗣️ 4. Voice and Audio Pipeline
+* **ElevenLabs HD and Edge Neural TTS:** Powered by natural voice profiles (including Monika Sogam and Edge Neural voices).
+* **Continuous Hands-Free VAD Listening:** Acoustic echo cancellation and voice activity gating prevent her from interrupting herself.
+* **Local Faster-Whisper Transcription:** Fast, private on-device speech-to-text.
 
 ### 📱 5. Omnichannel Interfaces
-* **3D Holographic Web Interface:** Interactive browser interface on `http://localhost:8000`.
+* **3D Holographic Web Interface:** Browser dashboard running on `http://localhost:8000`.
 * **Hands-Free Voice Terminal:** `python voice_main.py`
-* **Smartphone-to-PC Telegram Sync:** Remote voice note and tool execution via `python telegram_bot.py`.
-* **Floating Desktop Companion Widget:** Translucent screen orb via `python desktop_orb.py`.
+* **Telegram Smartphone Sync:** Voice note and remote tool control via `python telegram_bot.py`.
+* **Floating Desktop Orb:** Compact desktop companion widget via `python desktop_orb.py`.
 
 ---
 
 ## 🚀 Quick Start
 
-### 1. Prerequisites & Installation
+### 1. Prerequisites and Installation
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/Cortana.git
+git clone https://github.com/Utkarsh1087/Cortana.git
 cd Cortana
 
 # Create and activate virtual environment
@@ -103,12 +103,12 @@ python -m venv .venv
 .venv\Scripts\activate      # Windows PowerShell
 # source .venv/bin/activate # Linux / macOS
 
-# Install required packages
+# Install dependencies
 pip install -r requirements.txt
 ```
 
 ### 2. Configure Environment Variables
-Copy `.env.example` to `.env` and insert your API keys:
+Copy `.env.example` to `.env` and fill in your API keys:
 ```bash
 cp .env.example .env
 ```
@@ -123,7 +123,7 @@ ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 ```
 
 ### 3. Launch Cortana
-Run the one-click launcher on Windows:
+Run the launcher script on Windows:
 ```cmd
 run_cortana.bat
 ```
@@ -131,13 +131,13 @@ Or start the server directly:
 ```bash
 python avatar_server.py
 ```
-Open **[http://localhost:8000](http://localhost:8000)** in your web browser.
+Open **[http://localhost:8000](http://localhost:8000)** in your browser.
 
 ---
 
 ## 🧠 Autonomous Subconscious Mind
 
-Cortana does not simply wait for prompts — her continuous cognition engine processes internal reflections, circadian vibes, and environmental cues:
+Cortana does not simply wait for prompts. Her cognition engine continuously processes internal thoughts, time of day, and what she sees:
 
 ```mermaid
 flowchart TD
@@ -161,7 +161,7 @@ flowchart TD
 
 ## 🛠️ 56+ Integrated Tools & Subsystems
 
-Cortana is equipped with 56 registered autonomous tools:
+Cortana has 56 registered autonomous tools built in:
 
 | Category | Key Capabilities |
 | :--- | :--- |
@@ -213,34 +213,34 @@ flowchart LR
 
 > ### 💬 A Note from the Creator
 > 
-> Cortana is actively in an early, experimental development stage. My goal is to build an open-source, embodied AI companion that feels genuinely alive, intuitive, emotionally attuned, and helpful.
+> Cortana is in an early, experimental stage of development. My goal is to build an open-source, embodied companion that feels genuinely alive, intuitive, and helpful.
 > 
-> **To be completely transparent:** I don't know if all the current tech choices, models, frameworks, and architectural decisions are 100% the best possible ones — I am actively experimenting, learning, and figuring things out as I build.
+> To be completely honest, I do not know if all the current tech choices, models, and architectural patterns are the absolute best ones. I am actively experimenting, learning, and figuring things out as I build.
 > 
-> **I am openly asking for help and ideas from the community!** Whether you're an AI researcher, frontend/3D developer, backend engineer, or enthusiast:
-> - 🛠️ **New Tools & Functions:** What tools, APIs, PC automations, or physical sensors should Cortana have?
-> - 🧠 **Cognition & Memory:** Suggestions for better Vector RAG pipelines, hierarchical episodic memory, or smarter subconscious thought loops.
-> - 🤖 **Models & Tech Stack:** Recommendations for more expressive LLMs, faster local vision models, or ultra-low-latency voice pipelines.
-> - 💃 **3D Graphics & Kinematics:** Smoother Three.js shaders, ARKit blendshapes, procedural bone kinematics, or WebGL performance tricks.
-> - ⚡ **Refactoring & Architecture:** Any cleaner design patterns, bug fixes, or optimizations.
+> **I would love help, advice, and ideas from the community.** Whether you are working on AI research, 3D graphics, backend systems, or just experimenting:
+> - 🛠️ **New Tools and Functions:** What capabilities, integrations, PC automations, or physical sensors would make her more useful?
+> - 🧠 **Cognition and Memory:** Ideas for better RAG pipelines, long-term memory graphs, or more natural subconscious loops.
+> - 🤖 **Models and Tech Stack:** Suggestions for faster or more expressive LLMs, local vision models, and low-latency voice pipelines.
+> - 💃 **3D Graphics and Kinematics:** Smoother Three.js shaders, ARKit blendshapes, procedural bone movements, or WebGL performance improvements.
+> - ⚡ **Architecture and Refactoring:** Cleaner design patterns, bug fixes, or performance tweaks.
 > 
-> **Any contribution, whether it's advice in an issue, an architectural critique, or a full pull request, is wholeheartedly encouraged!**
+> **Every contribution, whether it is an issue discussion, an architectural suggestion, or a pull request, is warmly welcomed.**
 
 ---
 
 ### ⭐ Support the Project
-If you find this project exciting, inspiring, or useful, please consider **dropping a ⭐ star on GitHub**! It motivates continued development and helps bring more open-source builders together.
+If you find this project interesting or inspiring, please consider **leaving a star on GitHub**. It helps the project reach more open-source builders and developers.
 
 ---
 
 ### 🤝 How to Contribute
-1. **Star & Fork the Repository** to follow along with updates.
-2. **Open an Issue or Discussion** to brainstorm features, share advice, or report bugs.
+1. **Star and Fork the Repository** to follow along with progress.
+2. **Open an Issue or Discussion** to share ideas, give feedback, or report bugs.
 3. **Submit a Pull Request:**
-   - Create a feature branch (`git checkout -b feature/amazing-enhancement`)
-   - Commit your changes (`git commit -m "Add new multimodal tool"`)
-   - Push to your branch (`git push origin feature/amazing-enhancement`)
-   - Open a **Pull Request** and let's collaborate!
+   - Create a feature branch (`git checkout -b feature/amazing-feature`)
+   - Commit your work (`git commit -m "Add new multimodal tool"`)
+   - Push to your branch (`git push origin feature/amazing-feature`)
+   - Open a **Pull Request** and let's build together!
 
 ---
 
