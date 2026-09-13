@@ -1,5 +1,6 @@
 import os
 import sys
+import random
 import asyncio
 from typing import List, Set
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -105,6 +106,28 @@ def parse_llm_response_tags(raw_text: str):
     clean_text = re.sub(r'\*[^*]+\*', '', clean_text)
     clean_text = re.sub(r'\((?:smiles|smiling|giggles|giggling|laughs|laughing|sighs|sighing|pauses|whispers|winks|nodding|shaking head)[^)]*\)', '', clean_text, flags=re.IGNORECASE)
     clean_text = re.sub(r'\s+', ' ', clean_text).strip()
+    
+    # Dynamic Contextual Animation Inference if LLM omitted [ANIMATION: ...]
+    if not animation:
+        lower = clean_text.lower()
+        if any(w in lower for w in ['joke', 'haha', 'funny', 'laugh', 'giggle', 'chuckle', 'rofl', 'lmao', 'pun', 'hilarious', 'mazak', 'haso']):
+            animation = "laugh"
+        elif any(w in lower for w in ['hello', 'hi ', 'hey ', 'good morning', 'good evening', 'good afternoon', 'bye', 'see you', 'namaste']):
+            animation = "wave"
+        elif any(w in lower for w in ['thank', 'grateful', 'welcome', 'shukriya', 'dhanyawad']):
+            animation = "bow"
+        elif any(w in lower for w in ['yes', 'agree', 'definitely', 'sure', 'of course', 'bilkul', 'sahi']):
+            animation = "head nod"
+        elif any(w in lower for w in ['no ', 'never', 'disagree', 'not really', 'nahi', 'nahin']):
+            animation = "shake head no"
+        elif emotion in ['playful', 'happy']:
+            animation = random.choice(['laugh', 'excited', 'happy hands', 'being cocky', 'talking'])
+        elif emotion in ['affectionate', 'caring']:
+            animation = random.choice(['happy hands', 'relieved sigh', 'talking', 'acknowledging'])
+        elif emotion in ['jealous', 'angry']:
+            animation = random.choice(['angry gesture', 'angry point', 'dismissing gesture'])
+        else:
+            animation = random.choice(['talking', 'talking 1', 'talking 2', 'talking 3', 'weight shift'])
     
     return clean_text, emotion, animation
 
