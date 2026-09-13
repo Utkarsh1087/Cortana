@@ -144,7 +144,11 @@ class EdgeTTS(BaseTTS):
                     with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
                         temp_filename = f.name
 
-                    voice_to_use = ACTIVE_VOICE
+                    if is_hindi_or_hinglish(clean_text):
+                        voice_to_use = "en-IN-NeerjaNeural"
+                    else:
+                        voice_to_use = ACTIVE_VOICE
+
                     communicate = edge_tts.Communicate(
                         clean_text,
                         voice_to_use,
@@ -205,15 +209,41 @@ class EdgeTTS(BaseTTS):
         self.speak(text, rate=profile["rate"], pitch=profile["pitch"])
 
 
+def is_hindi_or_hinglish(text: str) -> bool:
+    """Detect if text contains Hindi (Devanagari) or common Hinglish words."""
+    if not text:
+        return False
+    # Check for Devanagari Unicode block
+    if re.search(r'[\u0900-\u097F]', text):
+        return True
+    
+    # Common Hinglish tokens
+    hinglish_keywords = {
+        "kya", "hai", "hain", "kaise", "accha", "achha", "thik", "theek", "nahi", "nahin",
+        "karo", "karna", "karenge", "karti", "karta", "karte", "tum", "aap", "mera", "meri", "mere",
+        "mujhe", "mujhse", "hum", "hume", "humein", "tumhe", "aapko", "bhai", "yaar", "bolo", "batao",
+        "suno", "sunao", "dekh", "dekho", "kuch", "hoga", "hogi", "honge", "raha", "rahi", "rahe",
+        "chal", "chalo", "baat", "shukriya", "dhanyawad", "namaste", "namaskar", "alvida", "sahi", "galat",
+        "kyun", "kyu", "kahan", "kab", "kaun", "lekin", "magar", "par", "bhi", "toh", "aur", "sab"
+    }
+    words = re.findall(r'\b[a-zA-Z]+\b', text.lower())
+    match_count = sum(1 for w in words if w in hinglish_keywords)
+    return match_count >= 1
+
+
 class ElevenLabsTTS(BaseTTS):
     """
-    ElevenLabs High-Definition Neural TTS engine with automatic fallback.
-    Uses ultra-fast, low-credit eleven_flash_v2_5.
+    ElevenLabs High-Definition Neural TTS engine with automatic bilingual routing:
+    - English -> Ivanna (Sassy, Condescending and Clear) / Laura
+    - Hindi / Hinglish -> Aisha (Affectionate and Warm) / Sarah
     """
     def __init__(self, api_key: str = None, voice_id: str = None, model_id: str = "eleven_flash_v2_5"):
         self.api_key = api_key or os.getenv("ELEVENLABS_API_KEY")
-        # Default: Sarah (EXAVITQu4vr4xnSDxMaL) - Warm, reassuring companion
-        self.voice_id = voice_id or os.getenv("ELEVENLABS_VOICE_ID") or "EXAVITQu4vr4xnSDxMaL"
+        # Dual Voice Personas:
+        self.voice_ivanna = "gE0owC0H9C8SzfDyIUtB"  # Ivanna - Sassy, Clear (English)
+        self.voice_aisha = "mg9npuuaf8WJphS6E0Rt"   # Aisha - Affectionate, Warm (Hindi/Hinglish)
+        self.voice_custom = voice_id or os.getenv("ELEVENLABS_VOICE_ID")
+        
         self.model_id = model_id # Flash v2.5 consumes 50% fewer credits with ultra-low latency
         self._edge_fallback = EdgeTTS()
         try:
@@ -239,6 +269,21 @@ class ElevenLabsTTS(BaseTTS):
             self._edge_fallback.speak(clean_text, rate=rate, pitch=pitch)
             return
 
+        is_hinglish = is_hindi_or_hinglish(clean_text)
+        
+        # Select target voice based on language
+        if self.voice_custom:
+            target_voice_id = self.voice_custom
+            fallback_voice_id = "EXAVITQu4vr4xnSDxMaL"
+        elif is_hinglish:
+            target_voice_id = self.voice_aisha   # Aisha for Hindi/Hinglish
+            fallback_voice_id = "EXAVITQu4vr4xnSDxMaL" # Sarah (warm/reassuring)
+        else:
+            target_voice_id = self.voice_ivanna  # Ivanna for English
+            fallback_voice_id = "FGY2WhTYpPnrIDTdsKH5" # Laura (sassy/quirky)
+
+        target_model = "eleven_multilingual_v2" if is_hinglish else self.model_id
+
         try:
             import requests
             import io
@@ -249,23 +294,23 @@ class ElevenLabsTTS(BaseTTS):
             }
             body = {
                 "text": clean_text,
-                "model_id": self.model_id,
+                "model_id": target_model,
                 "voice_settings": {
-                    "stability": 0.55,
+                    "stability": 0.50,
                     "similarity_boost": 0.75,
-                    "style": 0.35,
+                    "style": 0.40,
                     "use_speaker_boost": True
                 }
             }
             
-            url = f"https://api.elevenlabs.io/v1/text-to-speech/{self.voice_id}"
+            url = f"https://api.elevenlabs.io/v1/text-to-speech/{target_voice_id}"
             res = requests.post(url, json=body, headers=headers, timeout=12)
             
             if res.status_code != 200:
-                # If specific voice is restricted on free tier, try Sarah default or fallback
-                if self.voice_id != "EXAVITQu4vr4xnSDxMaL":
-                    fallback_url = "https://api.elevenlabs.io/v1/text-to-speech/EXAVITQu4vr4xnSDxMaL"
-                    res = requests.post(fallback_url, json=body, headers=headers, timeout=12)
+                # If library voice requires paid tier, use standard built-in equivalent
+                fallback_url = f"https://api.elevenlabs.io/v1/text-to-speech/{fallback_voice_id}"
+                body["model_id"] = "eleven_flash_v2_5"
+                res = requests.post(fallback_url, json=body, headers=headers, timeout=12)
                 
                 if res.status_code != 200:
                     self._edge_fallback.speak(clean_text, rate=rate, pitch=pitch)
