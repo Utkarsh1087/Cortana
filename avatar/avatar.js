@@ -929,24 +929,6 @@ function displayInnerThought(thought, gesture, emotion) {
     }
 }
 
-async function toggleAutonomousMind() {
-    const btn = document.getElementById('mind-toggle-btn');
-    try {
-        const res = await fetch('/api/autonomous_mind/toggle', { method: 'POST' });
-        const data = await res.json();
-        const isEnabled = data.enabled;
-        if (btn) {
-            btn.classList.toggle('active', isEnabled);
-            btn.classList.toggle('disabled', !isEnabled);
-            btn.textContent = isEnabled ? '🧠 Mind: ON' : '🧠 Mind: OFF';
-        }
-        const pill = document.getElementById('inner-thought-pill');
-        if (pill) {
-            pill.style.display = isEnabled ? 'inline-flex' : 'none';
-        }
-    } catch (e) {}
-}
-
 connectWebSocket();
 
 // -------------------------------------------------------------

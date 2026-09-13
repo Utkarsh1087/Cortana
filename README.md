@@ -106,7 +106,7 @@ graph TD
     C -->|Internal Reflection| F[Update Thought Ribbon UI]
 ```
 
-- **Mind Toggle**: Enable or disable Lisa's proactive mind directly from the top bar with the `🧠 Mind: ON/OFF` button.
+- **Always-On Consciousness**: Lisa continuously thinks in the background, evolving her thoughts and body language naturally.
 - **Thought Ribbon**: Observe what Lisa is thinking in real time at the top of the interface.
 
 ---
