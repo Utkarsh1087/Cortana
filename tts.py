@@ -210,9 +210,10 @@ class ElevenLabsTTS(BaseTTS):
     ElevenLabs High-Definition Neural TTS engine with automatic fallback.
     Uses ultra-fast, low-credit eleven_flash_v2_5.
     """
-    def __init__(self, api_key: str = None, voice_id: str = "21m00Tcm4TlvDq8ikWAM", model_id: str = "eleven_flash_v2_5"):
+    def __init__(self, api_key: str = None, voice_id: str = None, model_id: str = "eleven_flash_v2_5"):
         self.api_key = api_key or os.getenv("ELEVENLABS_API_KEY")
-        self.voice_id = voice_id # Default Rachel / Natural Female
+        # Default: Rachel (21m00Tcm4TlvDq8ikWAM) or Sarah (EXAVITQu4vr4xnSDxMaL)
+        self.voice_id = voice_id or os.getenv("ELEVENLABS_VOICE_ID") or "21m00Tcm4TlvDq8ikWAM"
         self.model_id = model_id # Flash v2.5 consumes 50% fewer credits with ultra-low latency
         self._edge_fallback = EdgeTTS()
         try:
