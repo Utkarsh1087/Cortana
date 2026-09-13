@@ -17,14 +17,14 @@ FEMALE_VOICES: Dict[str, str] = {
 # Current global active voice
 ACTIVE_VOICE = "en-US-JennyNeural"
 
-# Emotion vocal modulation presets
+# Emotion vocal modulation presets (calibrated for natural human pacing)
 EMOTION_PROFILES = {
-    "calm": {"rate": "-8%", "pitch": "-2Hz"},
-    "soothing": {"rate": "-12%", "pitch": "-4Hz"},
-    "energetic": {"rate": "+15%", "pitch": "+4Hz"},
-    "cheerful": {"rate": "+8%", "pitch": "+6Hz"},
-    "focused": {"rate": "+5%", "pitch": "+0Hz"},
-    "neutral": {"rate": "+0%", "pitch": "+0Hz"}
+    "calm": {"rate": "-10%", "pitch": "-2Hz"},
+    "soothing": {"rate": "-14%", "pitch": "-3Hz"},
+    "energetic": {"rate": "+3%", "pitch": "+2Hz"},
+    "cheerful": {"rate": "+0%", "pitch": "+3Hz"},
+    "focused": {"rate": "-4%", "pitch": "+0Hz"},
+    "neutral": {"rate": "-6%", "pitch": "+0Hz"}
 }
 
 import threading
@@ -297,9 +297,9 @@ class ElevenLabsTTS(BaseTTS):
                 "text": clean_text,
                 "model_id": target_model,
                 "voice_settings": {
-                    "stability": 0.50,
-                    "similarity_boost": 0.75,
-                    "style": 0.40,
+                    "stability": 0.70,
+                    "similarity_boost": 0.82,
+                    "style": 0.15,
                     "use_speaker_boost": True
                 }
             }
