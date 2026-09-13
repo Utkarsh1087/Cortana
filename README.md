@@ -11,7 +11,7 @@
 
 **Cortana** is an open-source, embodied, multimodal AI companion featuring real-time 3D motion-captured kinematics, an autonomous stream of consciousness with circadian awareness, DirectShow multimodal vision, edge neural voice synthesis, and 56+ autonomous system capabilities.
 
-[✨ Key Features](#-key-features) • [🚀 Quick Start](#-quick-start) • [🧠 Autonomous Subconscious Mind](#-autonomous-subconscious-mind) • [💃 3D Holographic Avatar](#-3d-holographic-avatar) • [🛠️ 56+ Tool Suite](#️-56-integrated-tools--subsystems) • [⚙️ Architecture](#-system-architecture)
+[✨ Key Features](#-key-features) • [🚀 Quick Start](#-quick-start) • [🧠 Autonomous Subconscious Mind](#-autonomous-subconscious-mind) • [💃 3D Holographic Avatar](#-3d-holographic-avatar) • [🛠️ 56+ Tool Suite](#️-56-integrated-tools--subsystems) • [⚙️ Architecture](#-system-architecture) • [🤝 Contributing](#-development-status--contributing)
 
 </div>
 
@@ -171,6 +171,22 @@ flowchart LR
     Vision <--> Tools
     TTS --> AudioOut
 ```
+
+---
+
+## 🌱 Development Status & Contributing
+
+> **A Note from the Creator:**  
+> Cortana is actively in an early, experimental development stage. I am continuously exploring, prototyping, and iterating on her architecture to make her feel truly alive, intuitive, and helpful.  
+> 
+> To be completely honest: I don't know if all the current tech choices, frameworks, and architectural patterns are 100% optimal yet — but I am actively learning, experimenting, and figuring things out as I build. If you notice areas that can be architected better, have ideas for smoother animations, faster inference, cleaner memory systems, or want to add new capabilities, **contributions and feedback are wholeheartedly welcomed!**
+
+### How to Contribute:
+1. **Fork the Repository** and clone it locally.
+2. **Create a Feature Branch** (`git checkout -b feature/awesome-enhancement`).
+3. **Commit your changes** (`git commit -m "Add awesome feature"`).
+4. **Push to the branch** (`git push origin feature/awesome-enhancement`).
+5. **Open a Pull Request** or start an **Issue / Discussion** to share your thoughts, advice, or ideas!
 
 ---
 
