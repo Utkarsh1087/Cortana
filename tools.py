@@ -2221,8 +2221,47 @@ def get_air_quality_and_uv(location: str) -> Dict[str, Any]:
 
 
 # -------------------------------------------------------------
-# Capability 36: Presence Detection & Auto-Greeting
+# Capability 36: Webcam Multimodal Vision & Scene Analysis
 # -------------------------------------------------------------
+@registry.register(
+    name="capture_webcam_and_analyze",
+    description="Capture a live image from the webcam and perform multimodal visual analysis with Gemini Vision. Call this whenever the user asks 'Can you see me?', 'Look at me', 'What am I wearing?', 'What is in front of the camera?', 'What am I holding?', 'Describe what you see', or asks any question about their physical appearance, clothes, room, objects, gestures, or visual environment.",
+    parameters={
+        "type": "object",
+        "properties": {
+            "prompt": {
+                "type": "string",
+                "description": "Specific visual inspection question or instruction (e.g. 'What is the user wearing?', 'Describe what is on the desk', 'What is the user doing?'). Defaults to 'Describe what you see in front of the camera in detail.'."
+            }
+        }
+    }
+)
+def capture_webcam_and_analyze(prompt: str = "Describe what you see in front of the camera in detail.") -> Dict[str, Any]:
+    """Capture a webcam frame and run Gemini Multimodal Vision analysis."""
+    try:
+        from face_vision import face_vision_engine
+        return face_vision_engine.analyze_scene(prompt=prompt)
+    except Exception as e:
+        return {"error": f"Camera vision analysis failed: {str(e)}"}
+
+
+@registry.register(
+    name="check_camera_status",
+    description="Check and verify if the webcam hardware is plugged in, accessible, functioning properly, and return its resolution.",
+    parameters={
+        "type": "object",
+        "properties": {}
+    }
+)
+def check_camera_status() -> Dict[str, Any]:
+    """Test webcam hardware accessibility and health."""
+    try:
+        from face_vision import face_vision_engine
+        return face_vision_engine.check_camera_health()
+    except Exception as e:
+        return {"error": f"Camera status check failed: {str(e)}"}
+
+
 @registry.register(
     name="detect_user_presence",
     description="Check if a person or user is currently sitting in front of the computer webcam.",
@@ -2236,19 +2275,13 @@ def detect_user_presence() -> Dict[str, Any]:
     try:
         import cv2
         import config
+        from face_vision import face_vision_engine
         from google import genai
         from google.genai import types
 
-        cap = cv2.VideoCapture(0)
-        if not cap.isOpened():
-            return {"error": "Webcam not available."}
-
-        for _ in range(5): cap.read()
-        ret, frame = cap.read()
-        cap.release()
-
-        if not ret or frame is None:
-            return {"error": "Could not capture webcam frame."}
+        frame = face_vision_engine.capture_webcam_frame()
+        if frame is None:
+            return {"error": "Webcam is currently not accessible or busy."}
 
         temp_img = "temp_presence.png"
         cv2.imwrite(temp_img, frame)
@@ -2297,19 +2330,13 @@ def check_posture_and_ergonomics() -> Dict[str, Any]:
     try:
         import cv2
         import config
+        from face_vision import face_vision_engine
         from google import genai
         from google.genai import types
 
-        cap = cv2.VideoCapture(0)
-        if not cap.isOpened():
+        frame = face_vision_engine.capture_webcam_frame()
+        if frame is None:
             return {"error": "Webcam not available."}
-
-        for _ in range(5): cap.read()
-        ret, frame = cap.read()
-        cap.release()
-
-        if not ret or frame is None:
-            return {"error": "Could not capture frame."}
 
         temp_img = "temp_posture.png"
         cv2.imwrite(temp_img, frame)
@@ -2359,19 +2386,13 @@ def read_physical_document(instruction: str = "Read all visible text on the page
     try:
         import cv2
         import config
+        from face_vision import face_vision_engine
         from google import genai
         from google.genai import types
 
-        cap = cv2.VideoCapture(0)
-        if not cap.isOpened():
+        frame = face_vision_engine.capture_webcam_frame()
+        if frame is None:
             return {"error": "Webcam not available."}
-
-        for _ in range(5): cap.read()
-        ret, frame = cap.read()
-        cap.release()
-
-        if not ret or frame is None:
-            return {"error": "Could not capture frame."}
 
         temp_doc = "temp_doc.png"
         cv2.imwrite(temp_doc, frame)
@@ -2421,19 +2442,13 @@ def analyze_outfit_and_style(event_type: str = "General occasion") -> Dict[str, 
     try:
         import cv2
         import config
+        from face_vision import face_vision_engine
         from google import genai
         from google.genai import types
 
-        cap = cv2.VideoCapture(0)
-        if not cap.isOpened():
+        frame = face_vision_engine.capture_webcam_frame()
+        if frame is None:
             return {"error": "Webcam not available."}
-
-        for _ in range(5): cap.read()
-        ret, frame = cap.read()
-        cap.release()
-
-        if not ret or frame is None:
-            return {"error": "Could not capture frame."}
 
         temp_outfit = "temp_outfit.png"
         cv2.imwrite(temp_outfit, frame)
@@ -2482,23 +2497,18 @@ def scan_qr_from_webcam(auto_open: bool = True) -> Dict[str, Any]:
     """Scan and decode QR code using OpenCV."""
     try:
         import cv2
-        cap = cv2.VideoCapture(0)
-        if not cap.isOpened():
-            return {"error": "Webcam not available."}
-
+        from face_vision import face_vision_engine
         detector = cv2.QRCodeDetector()
         decoded_text = ""
 
-        # Scan across 10 frames to give camera time to focus
-        for _ in range(12):
-            ret, frame = cap.read()
-            if ret and frame is not None:
+        # Scan across frames
+        for _ in range(3):
+            frame = face_vision_engine.capture_webcam_frame()
+            if frame is not None:
                 val, points, _ = detector.detectAndDecode(frame)
                 if val:
                     decoded_text = val
                     break
-
-        cap.release()
 
         if not decoded_text:
             return {"status": "not_found", "message": "No clear QR code detected in front of camera. Try holding it steady and closer."}
@@ -2536,19 +2546,13 @@ def take_security_snapshot(reason: str = "Desk security check") -> Dict[str, Any
     """Save security photo to security_snapshots folder."""
     try:
         import cv2
+        from face_vision import face_vision_engine
         sec_dir = os.path.join(os.path.dirname(__file__), "security_snapshots")
         os.makedirs(sec_dir, exist_ok=True)
 
-        cap = cv2.VideoCapture(0)
-        if not cap.isOpened():
+        frame = face_vision_engine.capture_webcam_frame()
+        if frame is None:
             return {"error": "Webcam not available."}
-
-        for _ in range(5): cap.read()
-        ret, frame = cap.read()
-        cap.release()
-
-        if not ret or frame is None:
-            return {"error": "Could not capture camera frame."}
 
         ts = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         fname = f"sec_snap_{ts}.png"
@@ -2563,6 +2567,7 @@ def take_security_snapshot(reason: str = "Desk security check") -> Dict[str, Any
         }
     except Exception as e:
         return {"error": f"Security snapshot failed: {str(e)}"}
+
 
 
 # -------------------------------------------------------------

@@ -35,21 +35,103 @@ class FaceVisionEngine:
             """)
             conn.commit()
 
-    def capture_webcam_frame(self):
-        """Captures a single BGR frame from default webcam (index 0)."""
+    def capture_webcam_frame(self, index: Optional[int] = None):
+        """Captures a single high-quality BGR frame from webcam with multi-backend fallbacks."""
         try:
             import cv2
-            cap = cv2.VideoCapture(0)
-            if not cap.isOpened():
-                return None
-            time.sleep(0.3) # Camera warm up
-            ret, frame = cap.read()
-            cap.release()
-            if ret and frame is not None:
-                return frame
+            indices_to_try = [0, 1, 2] if index is None else [index]
+            backends = [cv2.CAP_DSHOW, cv2.CAP_MSMF, cv2.CAP_ANY] if os.name == 'nt' else [cv2.CAP_ANY]
+            
+            for idx in indices_to_try:
+                for backend in backends:
+                    try:
+                        cap = cv2.VideoCapture(idx, backend)
+                        if not cap.isOpened():
+                            cap.release()
+                            continue
+                        # Attempt standard resolution
+                        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+                        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+                        
+                        # Discard first few frames to let sensor auto-expose & adjust white balance
+                        frame = None
+                        for _ in range(5):
+                            ret, f = cap.read()
+                            if ret and f is not None:
+                                frame = f
+                            time.sleep(0.04)
+                            
+                        cap.release()
+                        if frame is not None and frame.size > 0:
+                            return frame
+                    except Exception:
+                        pass
         except Exception as e:
             print(f"[FaceVision Error capturing frame]: {e}")
         return None
+
+    def check_camera_health(self) -> Dict[str, Any]:
+        """Test and verify webcam hardware accessibility and resolution."""
+        frame = self.capture_webcam_frame()
+        if frame is None:
+            return {
+                "status": "unavailable",
+                "accessible": False,
+                "message": "Webcam could not be opened. Please verify that your camera is plugged in and permissions are granted."
+            }
+        h, w, c = frame.shape
+        return {
+            "status": "healthy",
+            "accessible": True,
+            "resolution": f"{w}x{h}",
+            "channels": c,
+            "message": f"Webcam is fully operational and accessible ({w}x{h})."
+        }
+
+    def analyze_scene(self, prompt: str = "Describe what you see in front of the camera in detail.", frame=None) -> Dict[str, Any]:
+        """
+        Captures a live frame and analyzes it using Gemini Multimodal Vision.
+        """
+        if frame is None:
+            frame = self.capture_webcam_frame()
+
+        if frame is None:
+            return {
+                "status": "error",
+                "message": "Camera is currently unavailable or could not be accessed. Please ensure no other app is locking the webcam."
+            }
+
+        try:
+            import cv2
+            import io
+            from PIL import Image
+            import config
+            from google import genai
+            from google.genai import types
+
+            rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            pil_img = Image.fromarray(rgb)
+            buf = io.BytesIO()
+            pil_img.save(buf, format='JPEG', quality=90)
+            jpeg_bytes = buf.getvalue()
+
+            client = genai.Client(api_key=config.GEMINI_API_KEY)
+            res = client.models.generate_content(
+                model=config.GEMINI_MODEL,
+                contents=[
+                    types.Part.from_bytes(data=jpeg_bytes, mime_type='image/jpeg'),
+                    f"You are Lisa, an observant, warm personal AI companion. Look at this live webcam capture and answer the following request accurately and conversationally:\nRequest: {prompt}"
+                ]
+            )
+
+            return {
+                "status": "success",
+                "analysis": res.text.strip(),
+                "resolution": f"{frame.shape[1]}x{frame.shape[0]}"
+            }
+        except Exception as e:
+            return {"status": "error", "message": f"Vision analysis failed: {str(e)}"}
+
 
     def enroll_user(self, user_name: str, frame=None) -> Dict[str, Any]:
         """
