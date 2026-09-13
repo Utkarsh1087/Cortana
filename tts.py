@@ -235,13 +235,14 @@ class ElevenLabsTTS(BaseTTS):
     """
     ElevenLabs High-Definition Neural TTS engine with automatic bilingual routing:
     - English -> Ivanna (Sassy, Condescending and Clear) / Laura
-    - Hindi / Hinglish -> Aisha (Affectionate and Warm) / Sarah
+    - Hindi / Hinglish -> Monika Sogam (Friendly and Reassuring) / Aisha / Sarah
     """
     def __init__(self, api_key: str = None, voice_id: str = None, model_id: str = "eleven_flash_v2_5"):
         self.api_key = api_key or os.getenv("ELEVENLABS_API_KEY")
         # Dual Voice Personas:
         self.voice_ivanna = "gE0owC0H9C8SzfDyIUtB"  # Ivanna - Sassy, Clear (English)
-        self.voice_aisha = "mg9npuuaf8WJphS6E0Rt"   # Aisha - Affectionate, Warm (Hindi/Hinglish)
+        self.voice_monika = "2bNrEsM0omyhLiEyOwqY"  # Monika Sogam - Friendly and Reassuring (Hindi/Hinglish)
+        self.voice_aisha = "mg9npuuaf8WJphS6E0Rt"   # Aisha (Secondary Hindi Backup)
         self.voice_custom = voice_id or os.getenv("ELEVENLABS_VOICE_ID")
         
         self.model_id = model_id # Flash v2.5 consumes 50% fewer credits with ultra-low latency
@@ -276,7 +277,7 @@ class ElevenLabsTTS(BaseTTS):
             target_voice_id = self.voice_custom
             fallback_voice_id = "EXAVITQu4vr4xnSDxMaL"
         elif is_hinglish:
-            target_voice_id = self.voice_aisha   # Aisha for Hindi/Hinglish
+            target_voice_id = self.voice_monika  # Monika Sogam for Hindi/Hinglish
             fallback_voice_id = "EXAVITQu4vr4xnSDxMaL" # Sarah (warm/reassuring)
         else:
             target_voice_id = self.voice_ivanna  # Ivanna for English
