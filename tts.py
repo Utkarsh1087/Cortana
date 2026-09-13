@@ -14,8 +14,8 @@ FEMALE_VOICES: Dict[str, str] = {
     "neerja": "en-IN-NeerjaNeural",   # Indian English Expressive
 }
 
-# Current global active voice
-ACTIVE_VOICE = "en-US-JennyNeural"
+# Current global active voice (Hindi/Indian English Neural)
+ACTIVE_VOICE = "en-IN-NeerjaNeural"
 
 # Emotion vocal modulation presets (calibrated for natural human pacing)
 EMOTION_PROFILES = {
@@ -233,19 +233,14 @@ def is_hindi_or_hinglish(text: str) -> bool:
 
 class ElevenLabsTTS(BaseTTS):
     """
-    ElevenLabs High-Definition Neural TTS engine with automatic bilingual routing:
-    - English -> Ivanna (Sassy, Condescending and Clear) / Laura
-    - Hindi / Hinglish -> Monika Sogam (Friendly and Reassuring) / Aisha / Sarah
+    ElevenLabs High-Definition Neural TTS engine configured exclusively with Monika Sogam voice
+    for natural Hindi, Hinglish, and warm Indian English conversational speech.
     """
-    def __init__(self, api_key: str = None, voice_id: str = None, model_id: str = "eleven_flash_v2_5"):
+    def __init__(self, api_key: str = None, voice_id: str = None, model_id: str = "eleven_multilingual_v2"):
         self.api_key = api_key or os.getenv("ELEVENLABS_API_KEY")
-        # Dual Voice Personas:
-        self.voice_ivanna = "gE0owC0H9C8SzfDyIUtB"  # Ivanna - Sassy, Clear (English)
-        self.voice_monika = "2bNrEsM0omyhLiEyOwqY"  # Monika Sogam - Friendly and Reassuring (Hindi/Hinglish)
-        self.voice_aisha = "mg9npuuaf8WJphS6E0Rt"   # Aisha (Secondary Hindi Backup)
-        self.voice_custom = voice_id or os.getenv("ELEVENLABS_VOICE_ID")
-        
-        self.model_id = model_id # Flash v2.5 consumes 50% fewer credits with ultra-low latency
+        # Exclusive Voice: Monika Sogam - Friendly and Reassuring
+        self.voice_id = voice_id or os.getenv("ELEVENLABS_VOICE_ID") or "2bNrEsM0omyhLiEyOwqY"
+        self.model_id = model_id # Multilingual v2 provides authentic Indian cadence across Hindi & English
         self._edge_fallback = EdgeTTS()
         try:
             if not pygame.mixer.get_init():
@@ -270,20 +265,7 @@ class ElevenLabsTTS(BaseTTS):
             self._edge_fallback.speak(clean_text, rate=rate, pitch=pitch)
             return
 
-        is_hinglish = is_hindi_or_hinglish(clean_text)
-        
-        # Select target voice based on language
-        if self.voice_custom:
-            target_voice_id = self.voice_custom
-            fallback_voice_id = "EXAVITQu4vr4xnSDxMaL"
-        elif is_hinglish:
-            target_voice_id = self.voice_monika  # Monika Sogam for Hindi/Hinglish
-            fallback_voice_id = "EXAVITQu4vr4xnSDxMaL" # Sarah (warm/reassuring)
-        else:
-            target_voice_id = self.voice_ivanna  # Ivanna for English
-            fallback_voice_id = "FGY2WhTYpPnrIDTdsKH5" # Laura (sassy/quirky)
-
-        target_model = "eleven_multilingual_v2" if is_hinglish else self.model_id
+        target_voice_id = self.voice_id
 
         try:
             import requests
@@ -295,7 +277,7 @@ class ElevenLabsTTS(BaseTTS):
             }
             body = {
                 "text": clean_text,
-                "model_id": target_model,
+                "model_id": self.model_id,
                 "voice_settings": {
                     "stability": 0.70,
                     "similarity_boost": 0.82,
@@ -308,8 +290,8 @@ class ElevenLabsTTS(BaseTTS):
             res = requests.post(url, json=body, headers=headers, timeout=12)
             
             if res.status_code != 200:
-                # If library voice requires paid tier, use standard built-in equivalent
-                fallback_url = f"https://api.elevenlabs.io/v1/text-to-speech/{fallback_voice_id}"
+                # If community library voice is restricted on free tier, fallback to standard neural or EdgeTTS
+                fallback_url = "https://api.elevenlabs.io/v1/text-to-speech/EXAVITQu4vr4xnSDxMaL"
                 body["model_id"] = "eleven_flash_v2_5"
                 res = requests.post(fallback_url, json=body, headers=headers, timeout=12)
                 
