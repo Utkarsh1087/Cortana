@@ -457,8 +457,8 @@ flowchart TD
 ## 1. Clone the repository
 
 ```bash
-git clone https://github.com/Utkarsh1087/Cortana.git
-cd Cortana
+git clone https://github.com/Utkarsh1087/Lisa.git
+cd Lisa
 ```
 
 ## 2. Create a virtual environment
@@ -508,7 +508,7 @@ ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 ### Windows
 
 ```cmd
-run_cortana.bat
+run_lisa.bat
 ```
 
 ### Or directly

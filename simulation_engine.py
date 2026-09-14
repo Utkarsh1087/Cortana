@@ -1,5 +1,5 @@
 """
-Cortana-Grade Multi-Branch Scenario Simulation Engine for Lisa AI
+Lisa Tactical Multi-Branch Scenario Simulation Engine
 Executes parallel probabilistic simulation branches, calculates risk factors,
 failure points, and generates an interactive Cyberpunk Tactical Simulation HUD.
 """
@@ -11,7 +11,7 @@ from typing import Dict, Any
 import config
 from google import genai
 
-class CortanaSimulationEngine:
+class LisaSimulationEngine:
     def __init__(self):
         self.sim_dir = os.path.join(os.path.dirname(__file__), "simulations")
         os.makedirs(self.sim_dir, exist_ok=True)
@@ -20,7 +20,7 @@ class CortanaSimulationEngine:
         """Execute parallel multi-branch scenario simulations and generate visual HUD."""
         client = genai.Client(api_key=config.GEMINI_API_KEY)
         
-        sim_prompt = f"""You are Cortana/Lisa, an advanced tactical predictive AI.
+        sim_prompt = f"""You are Lisa, an advanced tactical predictive AI.
 Analyze the following scenario and simulate {branch_count} distinct strategic branches or potential outcomes.
 
 SCENARIO:
@@ -113,7 +113,7 @@ Output ONLY valid, parseable JSON with this schema:
         }
 
     def _generate_tactical_hud(self, scenario: str, data: Dict[str, Any]) -> str:
-        """Generate sleek Cortana Holographic Sci-Fi HUD HTML file."""
+        """Generate sleek Lisa Holographic Sci-Fi HUD HTML file."""
         ts = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         hud_filename = f"tactical_sim_{ts}.html"
         hud_path = os.path.join(self.sim_dir, hud_filename)
@@ -152,7 +152,7 @@ Output ONLY valid, parseable JSON with this schema:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LISA // CORTANA SIMULATION HUD</title>
+    <title>LISA STRATEGIC SIMULATION HUD</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
@@ -303,4 +303,4 @@ Output ONLY valid, parseable JSON with this schema:
 
         return hud_path
 
-simulation_engine = CortanaSimulationEngine()
+simulation_engine = LisaSimulationEngine()

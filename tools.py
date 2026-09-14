@@ -3034,11 +3034,11 @@ def backup_workspace(backup_name: Optional[str] = None) -> Dict[str, Any]:
 
 
 # -------------------------------------------------------------
-# Capability 49: Cortana-Grade Multi-Branch Scenario Simulation Engine
+# Capability 49: Lisa-Grade Multi-Branch Scenario Simulation Engine
 # -------------------------------------------------------------
 @registry.register(
     name="run_scenario_simulation",
-    description="Execute parallel multi-branch scenario simulations (like Cortana in Halo), calculate probabilistic success rates, identify points of failure, and open an interactive visual Tactical HUD.",
+    description="Execute parallel multi-branch scenario simulations, calculate probabilistic success rates, identify points of failure, and open an interactive visual Tactical HUD.",
     parameters={
         "type": "object",
         "properties": {
@@ -3059,7 +3059,7 @@ def backup_workspace(backup_name: Optional[str] = None) -> Dict[str, Any]:
     }
 )
 def run_scenario_simulation(scenario: str, branch_count: int = 4, open_visual_hud: bool = True) -> Dict[str, Any]:
-    """Run parallel scenario simulation via CortanaSimulationEngine."""
+    """Run parallel scenario simulation via LisaSimulationEngine."""
     try:
         from simulation_engine import simulation_engine
         return simulation_engine.execute_simulation(

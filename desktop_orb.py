@@ -1,8 +1,7 @@
 """
 Floating Desktop Active Live Ethereal Silk Plasma Nebula for Lisa AI.
-Renders an organic, luminous fluid flame / quantum silk nebula (Cortana-style)
+Renders an organic, luminous fluid flame / quantum silk nebula
 with anti-aliased translucent flowing ribbons, electric blue/violet gradients, and audio responsiveness.
-
 """
 
 import os
@@ -214,7 +213,7 @@ class LisaQuantumNebulaOrb:
             energy_scale = 1.15 + (self.audio_energy * 0.45)
 
         # -------------------------------------------------------------
-        # 1. Multi-Layer Luminous Silk Petal Sheets (Cortana Vortex)
+        # 1. Multi-Layer Luminous Silk Petal Sheets (Lisa Vortex)
         # -------------------------------------------------------------
         num_petals = 13
         mid_col = scheme["mid"]
